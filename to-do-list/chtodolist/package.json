@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@mui/icons-material": "^5.11.16",
     "codehooks-js": "^1.0.10"
   },
   "description": ""
