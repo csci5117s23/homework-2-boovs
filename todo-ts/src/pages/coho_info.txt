@@ -1,0 +1,63 @@
+Project name: todobackend-fm9y
+Team: Josh Yang (personal account)
+
+API Endpoint: https://todobackend-fm9y.api.codehooks.io/dev
+
+Tokens: 
+3b7c5db3-2f5c-4ed0-a2cb-da5a79ef809e (RW)
+2b2e8993-944c-491d-9081-ec3f2412fe50 (R)
+
+
+
+---- Get all users ----
+curl -X GET \
+  'http://localhost:3000/dev/user' \
+  --header 'Content-Type: application/json'
+
+
+---- Get a user ----
+curl -X GET \
+  'http://localhost:3000/dev/user?name=Ally' \
+  --header 'Content-Type: application/json'
+
+
+---- Post a new user ----
+curl -X POST \
+  'http://localhost:3000/dev/user' \
+  --header 'Content-Type: application/json' \
+  --data-raw '{
+  "name": "Ally",
+  "email": "ally@example.com"
+}'
+
+
+---- Post a new user w/ an invalid email ----
+curl -X POST \
+  'http://localhost:3000/dev/user' \
+  --header 'Content-Type: application/json' \
+  --data-raw '{
+  "name": "Sally",
+  "email": "sally.example.com"
+}'
+
+
+
+---- Deleting a user ----
+curl -X DELETE 'http://localhost:3000/dev/user?name=Sally'
+
+QUICK:  user_2O87JXwt7y77cPGBgSNKcVlNFG4
+ROBERT: user_2O87JXwt7y77cPGBgSNKcVlNFG4
+
+
+--- Post a Todo-Task ---
+curl -X POST \
+  'http://localhost:3000/dev/task' \
+  --header 'Content-Type: application/json' \
+  --data-raw '{ 
+        "userId":     2,
+        "id":         2,
+        "value":      "Value",
+        "date":       "2014-01-01T23:28:56.782Z",
+        "done":       true,
+        "starred":    false
+    }'
