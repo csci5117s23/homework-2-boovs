@@ -66,7 +66,7 @@ export default function TodosPageLayout() {
 
           {/* <TodoListAll/> */}
           {/* Task content controller */}
-            <TaskEditor page="done"/>
+            <TaskEditor page="unfinished"/>
 
         </Box>
     </Box>

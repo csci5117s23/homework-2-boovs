@@ -5,6 +5,9 @@ const API_KEY_R = "2b2e8993-944c-491d-9081-ec3f2412fe50";
 const route: string = "/task";
 
 
+// ------------------------------------------------
+// GET Functions 
+// ------------------------------------------------
 export async function getTasks(authToken: any) {
     const result = await fetch(backend_base+route,{
         'method':'GET',
@@ -15,7 +18,33 @@ export async function getTasks(authToken: any) {
     return await result.json();
 }
 
+export async function getDoneTasks(authToken: any, done: boolean) {
+    const result = await fetch(backend_base+route,{
+        'method':'GET',
+        'headers': {
+            'Authorization': 'Bearer ' + authToken,
+        }
+    })
+    const tasks = await result.json();
+    return tasks.filter((task: any) => (task.done === done))
+}
 
+
+export async function getStarredTasks(authToken: any) {
+    const result = await fetch(backend_base+route,{
+        'method':'GET',
+        'headers': {
+            'Authorization': 'Bearer ' + authToken,
+        }
+    })
+    const tasks = await result.json();
+    return tasks.filter((task: any) => (task.starred === true))
+}
+
+
+// ------------------------------------------------
+// 
+// ------------------------------------------------
 export async function postTask(authToken: any, taskText: string) {
     const result = await fetch(backend_base+route,{
         'method':'POST',

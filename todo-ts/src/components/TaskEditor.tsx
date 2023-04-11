@@ -25,8 +25,18 @@ import Link from 'next/link'
 import { useAuth } from "@clerk/nextjs";
 
 // DB Function imports
-import { getTasks, postTask, updateTask, deleteTask } from "../modules/taskData";
-import { formatDate, formatDate2 } from '../modules/dateFormatter';
+import { 
+  getTasks, 
+  getDoneTasks, 
+  getStarredTasks,
+  postTask, 
+  updateTask, 
+  deleteTask 
+} from "../modules/taskData";
+import { 
+  formatDate, 
+  formatDate2 
+} from '../modules/dateFormatter';
 
 
 // Type for to-do tasks
@@ -40,7 +50,7 @@ interface TaskType {
 
 // --------------------------------------------------------------------------
 // --------------------------------------------------------------------------
-export default function TaskEditor(page: string) {
+export default function TaskEditor( {page}: any ) {
   const JWT_TEMPLATE_NAME = "codehooks-todo";
 
   const { isLoaded, userId, sessionId, getToken } = useAuth();
@@ -48,20 +58,6 @@ export default function TaskEditor(page: string) {
   
   const [tasks, setTasks] = useState<TaskType[]>([]);
   const [addTaskText, setAddTaskText] = useState<string>("");
-  
-  // -------------------------------------
-  // Load in signed-in user
-  // -------------------------------------
-  useEffect(() => {
-    async function process() {
-      if (userId) {
-        const token = await getToken({ template: JWT_TEMPLATE_NAME});
-        setTasks(await getTasks(token));
-        setLoading(false);
-      }
-    }
-    process();
-  }, [isLoaded]);
 
   // -------------------------------------
   // Add a to-do task to the react DOM
@@ -127,6 +123,40 @@ export default function TaskEditor(page: string) {
   }
 
 
+  // -------------------------------------
+  // Load in signed-in user
+  // -------------------------------------
+  useEffect(() => {
+    async function process() {
+      // Todo page
+      if ((userId) && (page === "todos")) {
+        const token = await getToken({ template: JWT_TEMPLATE_NAME});
+        setTasks(await getTasks(token));
+        setLoading(false);
+      }
+      // Done page
+      if ((userId) && (page === "done")) {
+        const token = await getToken({ template: JWT_TEMPLATE_NAME});
+        setTasks(await getDoneTasks(token, true));
+        setLoading(false);
+      }
+      // Unfinished page
+      if ((userId) && (page === "unfinished")) {
+        const token = await getToken({ template: JWT_TEMPLATE_NAME});
+        setTasks(await getDoneTasks(token, false));
+        setLoading(false);
+      }
+      // Starred page
+      if ((userId) && (page === "starred")) {
+        const token = await getToken({ template: JWT_TEMPLATE_NAME});
+        setTasks(await getStarredTasks(token));
+        setLoading(false);
+      }
+    }
+    process();
+  }, [isLoaded]);
+
+
   // ----------------------------------------------------
   // ----------------------------------------------------
   // Load to-do list into DOM
@@ -134,38 +164,32 @@ export default function TaskEditor(page: string) {
   // ----------------------------------------------------
   if (loading) {
     return <span> loading... </span>;
-  }   
+  }
   else {
     return (
       <>
-        {/* Add task container*/}
-        <Box sx={{ mt: 2}}>
-          
-          {/* Task add text input*/}
-          <TextField 
-              sx={{ minWidth: '100%', mt: 1}}
-              id="standard-basic" 
-              label="Add a task" 
-              variant="standard"
-              value={addTaskText}
-              onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                setAddTaskText(event.target.value);
+        {/* Add task feature only shows on 'todo' page */}
+        {(page === "todos") && 
+          <Box sx={{ mt: 2 }}>
+            <TextField 
+                sx={{ minWidth: '100%', mt: 1}}
+                id="standard-basic" 
+                label="Add a task" 
+                variant="standard"
+                value={addTaskText}
+                onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                  setAddTaskText(event.target.value);
                 }}
-          />
-
-          
-          {/* Add task button */}
-          {if (page === "done") {
+            />
             <Button 
                 sx={{ mt: 1 }}
                 variant="outlined" 
                 onClick={ () => add() }
             >
                 <AddRoundedIcon/> Add
-            </Button>
-          }}
-          
-      </Box>
+            </Button>    
+        </Box>
+        }
 
         {/* List of items */}
         <List>

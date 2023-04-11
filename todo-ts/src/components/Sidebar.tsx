@@ -11,6 +11,7 @@ import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
+import Button from ''
 
 // MUI Icons
 import ListItemIcon from '@mui/material/ListItemIcon';
@@ -18,7 +19,7 @@ import CancelIcon from '@mui/icons-material/Cancel';
 import ChecklistRtlTwoToneIcon from '@mui/icons-material/ChecklistRtlTwoTone';
 import CheckCircleTwoToneIcon from '@mui/icons-material/CheckCircleTwoTone';
 import StarIcon from '@mui/icons-material/Star';
-
+import CategoryIcon from '@mui/icons-material/Category';
 
 
 // Next JS Imports
@@ -60,62 +61,62 @@ export default function Sidebar( {drawerWidth}: SideBarProps ) {
             <List>
                 <ListItem key={"Account"} disablePadding>
                     <ListItemButton>
-                    <ListItemIcon>
-                        <UserButton/>
-                    </ListItemIcon>
-                    <ListItemText primary="Account" />
+                        <ListItemIcon>
+                            <UserButton/>
+                        </ListItemIcon>
+                        <ListItemText primary="Account" />
                     </ListItemButton>
                 </ListItem>
 
                 <Divider /> 
 
                 {/* Task categories */}
-                <ListItem key={"Tasks"} disablePadding>
-                    <Link href={{ pathname: './todos' }}>
-                    <ListItemButton>
-                        <ListItemIcon>
-                        <ChecklistRtlTwoToneIcon/>
-                        </ListItemIcon>
-                        <ListItemText primary="Tasks" />
-                    </ListItemButton>
-                    </Link>
-                </ListItem>
+                <Link href={{ pathname: './todos' }}>
+                    <ListItem key={"Tasks"} disablePadding>
+                        <ListItemButton>
+                            <ListItemIcon>
+                                <ChecklistRtlTwoToneIcon/>
+                            </ListItemIcon>
+                            <ListItemText primary="Tasks" />
+                        </ListItemButton>
+                    </ListItem>
+                </Link>
 
                 {/* Starred category */}
-                <ListItem key={"Starred"} disablePadding>
-                    <Link href={{ pathname: './starred' }}>
-                    <ListItemButton>
-                        <ListItemIcon>
-                            <StarIcon/>
-                        </ListItemIcon>
-                        <ListItemText primary="Starred" />
-                    </ListItemButton>
-                    </Link>
-                </ListItem>
+                <Link href={{ pathname: './starred' }}>
+                    <ListItem key={"Starred"} disablePadding>
+                        <ListItemButton>
+                            <ListItemIcon>
+                                <StarIcon/>
+                            </ListItemIcon>
+                            <ListItemText primary="Starred" />
+                        </ListItemButton>
+                    </ListItem>
+                </Link>
                 
                 {/* Done category */}
-                <ListItem key={"Done"} disablePadding>
-                    <Link href={{ pathname: './done' }}>
-                    <ListItemButton>
-                        <ListItemIcon>
-                        <CheckCircleTwoToneIcon/>
-                        </ListItemIcon>
-                        <ListItemText primary="Done" />
-                    </ListItemButton>
-                    </Link>
-                </ListItem>
+                <Link href={{ pathname: './done' }}>
+                    <ListItem key={"Done"} disablePadding>
+                        <ListItemButton>
+                            <ListItemIcon>
+                            <CheckCircleTwoToneIcon/>
+                            </ListItemIcon>
+                            <ListItemText primary="Done" />
+                        </ListItemButton>
+                    </ListItem>
+                </Link>
 
                 {/* 'Unfinished' category */}
-                <ListItem key={"Unfinished"} disablePadding>
-                    <Link href={{ pathname: './unfinished' }}>
-                    <ListItemButton>
-                        <ListItemIcon>
-                        <CancelIcon/>
-                        </ListItemIcon>
-                        <ListItemText primary="Unfinished" />
-                    </ListItemButton>
-                    </Link>
-                </ListItem>
+                <Link href={{ pathname: './unfinished' }}>
+                    <ListItem key={"Unfinished"} disablePadding>
+                        <ListItemButton>
+                            <ListItemIcon>
+                            <CancelIcon/>
+                            </ListItemIcon>
+                            <ListItemText primary="Unfinished" />
+                        </ListItemButton>
+                    </ListItem>
+                </Link>
             </List>
             <Divider /> 
 
@@ -123,12 +124,16 @@ export default function Sidebar( {drawerWidth}: SideBarProps ) {
             <ListItem key={"Categories"} disablePadding>
                 <ListItemButton>
                     <ListItemIcon>
-                    <CancelIcon/>
+                        <CategoryIcon/>
                     </ListItemIcon>
                     <ListItemText primary="Categories" />
                 </ListItemButton>
             </ListItem>
 
+            <Button>
+
+
+            </Button>
             
         </Box>
       </Drawer>

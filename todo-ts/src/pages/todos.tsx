@@ -22,13 +22,13 @@ import { UserButton } from '@clerk/nextjs';
 import Header from '@/components/Header';
 import Sidebar from '@/components/Sidebar';
 import TodoListAll from '@/components/AllPage';
-import Test from '@/components/Test';
+import TaskEditor from '@/components/TaskEditor';
 import { formatDate, formatDate2 } from '../modules/dateFormatter';
 
 // ------------------
 // Const variables
 // ------------------
-const drawerWidth = 230;
+const drawerWidth = 240;
 
 // --------------------------------
 // Main component export function
@@ -65,7 +65,8 @@ export default function TodosPageLayout() {
             </Card>
 
           {/* <TodoListAll/> */}
-          <Test/>
+          {/* Task content controller */}
+            <TaskEditor page="todos"/>
 
         </Box>
     </Box>
