@@ -23,11 +23,12 @@ import Header from '@/components/Header';
 import Sidebar from '@/components/Sidebar';
 import TodoListAll from '@/components/AllPage';
 import Test from '@/components/Test';
+import { formatDate, formatDate2 } from '../modules/dateFormatter';
 
 // ------------------
 // Const variables
 // ------------------
-const drawerWidth = 240;
+const drawerWidth = 230;
 
 // --------------------------------
 // Main component export function
@@ -53,17 +54,14 @@ export default function TodosPageLayout() {
         />
 
         {/* Content */}
-        <Box sx={{ flexGrow: 1, p: 3 }}>
+        <Box sx={{ flexGrow: 1, p: 3, minHeight: '95.8vh', backgroundColor: 'theme.primary' }}>
             <Toolbar />
 
             {/* Today's date */}
             <Card sx={{mt: -4}} >
-              <CardContent>
-                  <Typography>
-                  <WbSunnyIcon/>
-                  <span> </span> Friday, April 6th
-                  </Typography>
-              </CardContent>
+                <Typography sx={{ padding: 1 }}>
+                  <WbSunnyIcon/> {formatDate(new Date())}
+                </Typography>
             </Card>
 
           {/* <TodoListAll/> */}

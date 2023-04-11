@@ -26,33 +26,32 @@ import { useAuth } from "@clerk/nextjs";
 
 // DB Function imports
 import { getTasks, postTask, updateTask, deleteTask } from "../modules/taskData";
-
-// Checkbox color
-const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
+import { formatDate, formatDate2 } from '../modules/dateFormatter';
 
 
 // Type for to-do tasks
-interface ItemType {
-  userId: string; 
+interface TaskType {
   _id: string; 
   value: string; 
-  date: Date; 
   done: boolean; 
   starred: boolean;
+  createdOn: Date;
 }
 
-
-export default function TaskEditor() {
+// --------------------------------------------------------------------------
+// --------------------------------------------------------------------------
+export default function TaskEditor(page: string) {
   const JWT_TEMPLATE_NAME = "codehooks-todo";
 
   const { isLoaded, userId, sessionId, getToken } = useAuth();
   const [loading, setLoading] = useState(true);
   
-  const [tasks, setTasks] = useState<ItemType[]>([]);
+  const [tasks, setTasks] = useState<TaskType[]>([]);
   const [addTaskText, setAddTaskText] = useState<string>("");
   
-
+  // -------------------------------------
   // Load in signed-in user
+  // -------------------------------------
   useEffect(() => {
     async function process() {
       if (userId) {
@@ -64,8 +63,9 @@ export default function TaskEditor() {
     process();
   }, [isLoaded]);
 
-
+  // -------------------------------------
   // Add a to-do task to the react DOM
+  // -------------------------------------
   async function add() {
     const token = await getToken({ template: JWT_TEMPLATE_NAME });
     const newTask = await postTask(token, addTaskText);
@@ -73,8 +73,9 @@ export default function TaskEditor() {
     setTasks(tasks.concat(newTask));
   }
 
-
+  // -------------------------------------
   // Remove a to-do task to the react DOM
+  // -------------------------------------
   async function del(taskId: any) {
     const token = await getToken({ template: JWT_TEMPLATE_NAME });
     try {
@@ -86,35 +87,51 @@ export default function TaskEditor() {
   }
 
 
-  // // Mark a to-do task to the react DOM
-  // async function markDone(task: any) {
-  //   // Toggle 'done' status for this task
-  //   const newList = tasks.map((item) => {
-  //     if (item._id === task._id) {
-  //       // Update state checkmark for selected task
-  //       const updatedItem = {
-  //           ...item, done: !task.done,
-  //       }; return updatedItem;
-  //     } return item;
-  //   });
-  //   setTasks(newList);
+  // -------------------------------------
+  // Toggle done status of selected task
+  // -------------------------------------
+  async function markDone(task: any) {
+    // Toggle 'done' status for this task
+    const updatedTask = {...task, done: !task.done }
+    const newList = tasks.map((item) => {
+      if (item._id === updatedTask._id) {
+        return updatedTask;  // Update checkmark for selected task
+      }
+      return item;           // For other tasks, put back into list
+    });
+    setTasks(newList);       // Apply new task list to DOM
 
-  //   // Send PUT request to modify
-  //   const token = await getToken({ template: JWT_TEMPLATE_NAME });
-  //   const newTask = await updateTask(token, task);
-  // }
-
-
-  // Add a to-do task to the react DOM
-  // async function add() {
-  //   const token = await getToken({ template: JWT_TEMPLATE_NAME });
-  //   const newTask = await postTask(token, textInput);
-  //   setTextInput("");
-  //   setTasks(tasks.concat(newTask));
-  // }
+    // Send PUT request to DB
+    const token = await getToken({ template: JWT_TEMPLATE_NAME });
+    const newTask = await updateTask(token, updatedTask);
+  }
 
 
-  // Check if loading
+  // ---------------------------------------
+  // Toggle starred status of selected task
+  // ---------------------------------------
+  async function markStarred(task: any) {
+    // Toggle 'starred' status for this task
+    const updatedTask = {...task, starred: !task.starred }
+    const newList = tasks.map((item) => {
+      if (item._id === updatedTask._id) {
+        return updatedTask;  // Update starred button for selected task
+      }
+      return item;           // For other tasks, put back into list
+    });
+    setTasks(newList);       // Apply new task list to DOM
+
+    // Send PUT request to DB
+    const token = await getToken({ template: JWT_TEMPLATE_NAME });
+    const newTask = await updateTask(token, updatedTask);
+  }
+
+
+  // ----------------------------------------------------
+  // ----------------------------------------------------
+  // Load to-do list into DOM
+  // ----------------------------------------------------
+  // ----------------------------------------------------
   if (loading) {
     return <span> loading... </span>;
   }   
@@ -136,14 +153,17 @@ export default function TaskEditor() {
                 }}
           />
 
+          
           {/* Add task button */}
-          <Button 
-              sx={{ mt: 1 }}
-              variant="outlined" 
-              onClick={ () => add() }
-          >
-              <AddRoundedIcon/> Add
-          </Button>
+          {if (page === "done") {
+            <Button 
+                sx={{ mt: 1 }}
+                variant="outlined" 
+                onClick={ () => add() }
+            >
+                <AddRoundedIcon/> Add
+            </Button>
+          }}
           
       </Box>
 
@@ -160,12 +180,11 @@ export default function TaskEditor() {
 
                               {/* Date made */}
                               <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-                                  {/* {userId}  */}
-                                    {/* {formatDate(item.date)} */}
+                                  {formatDate2(new Date(task.createdOn))}
                               </Typography>
 
                               {/* Task title */}
-                              <Typography  sx={{ mb: -2}}  variant="h6" component="div">
+                              <Typography  sx={{ mb: -2 }} variant="h6" component="div">
                                   {task.value}
                               </Typography>
                               
@@ -179,20 +198,17 @@ export default function TaskEditor() {
                                   <Box sx={{ flexGrow: 1 }}/>
 
                                   {/* Done button */}
-                                  <Button>
-                                      <Checkbox {...label}
+                                  <Button onClick={ () => markDone(task) }>
+                                      <Checkbox
                                           color="success"
                                           checked={task.done}
-                                          onChange={ () => markDone(task) }
-                                          inputProps={{ 'aria-label': 'controlled' }}
                                       />
-                                      {task.done ? 'Done' : 'Incomplete'}
+                                      { task.done ? 'Done' : 'Unfinished' }
                                   </Button>
 
                                   {/* Star button */}
-                                  <Button onClick={ () => starItem( task._id, task.starred ) }>
-                                      <StarBorderIcon/>
-                                      {task.starred ? 'Starred' : 'Not starred'}
+                                  <Button onClick={ () => markStarred(task) }>
+                                      { task.starred ? <><StarIcon/></> : <><StarBorderIcon/></> }
                                   </Button>
                               </Box>
 

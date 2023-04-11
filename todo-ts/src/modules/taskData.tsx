@@ -16,14 +16,19 @@ export async function getTasks(authToken: any) {
 }
 
 
-export async function postTask(authToken: any, task: any) {
+export async function postTask(authToken: any, taskText: string) {
     const result = await fetch(backend_base+route,{
         'method':'POST',
         'headers': {
             'Authorization': 'Bearer ' + authToken,
             'Content-Type': 'application/json'
         },
-        'body': JSON.stringify(task)
+        'body': JSON.stringify({
+            value:      taskText,
+            done:       false,
+            starred:    false,
+        }
+        )
     })
     return await result.json();
 }

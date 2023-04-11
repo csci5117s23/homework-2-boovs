@@ -86,7 +86,7 @@ export default function Sidebar( {drawerWidth}: SideBarProps ) {
                     <Link href={{ pathname: './starred' }}>
                     <ListItemButton>
                         <ListItemIcon>
-                        <StarIcon/>
+                            <StarIcon/>
                         </ListItemIcon>
                         <ListItemText primary="Starred" />
                     </ListItemButton>

@@ -10,6 +10,7 @@ import Typography from '@mui/material/Typography';
 import MenuIcon from '@mui/icons-material/Menu';
 import IconButton from '@mui/material/IconButton';
 import BadgeIcon from '@mui/icons-material/Badge';
+import HomeIcon from '@mui/icons-material/Home';
 
 // Next JS Imports
 import Link from 'next/link'
@@ -46,7 +47,7 @@ export default function Header( ) {
                             edge="start"
                             sx={{ mr: 2 }}
                         >
-                            <BadgeIcon />
+                            <HomeIcon/>
                         </IconButton>
                     </Link>
 

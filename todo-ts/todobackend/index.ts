@@ -22,11 +22,9 @@ const options = {  // Schema options
 }
 // Database schema - To-do tasks
 const taskSchemaYup = object( {
-  userId:     string().required(),
   value:      string().required(),
-  date:       date().required(),
-  starred:    bool().required(),
   done:       bool().required(),
+  starred:    bool().required(),
   createdOn:  date().default(() => new Date()),
 })
 crudlify(app, {task: taskSchemaYup}, options)
