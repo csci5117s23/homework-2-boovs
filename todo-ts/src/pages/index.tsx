@@ -3,18 +3,12 @@
 ///////////////////////////////////////
 import * as React from 'react';
 import Head from 'next/head'
-import Image from 'next/image'
 import { Inter, Roboto } from 'next/font/google'
 
-// Codehooks imports
-// import {app, Datastore} from 'codehooks-js';
+import TodoListAll from '../components/AllPage';
+
 
 const inter = Inter({ subsets: ['latin'] })
-
-const roboto = Roboto({
-  weight: '900',
-  subsets: ['latin'],
-})
 
 ///////////////////////////////////////
 // Home function

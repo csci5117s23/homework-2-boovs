@@ -57,10 +57,10 @@ export function formatDate(inputDate: Date) : string
     return inputDate.toLocaleDateString('en-us', { weekday:"long", year:"numeric", month:"long", day:"numeric"}) 
 }
 
-/////////////////////////////////////////////////////////////////////////
+// ----------------------------------------------------------------
 // DEFAULT EXPORT 
-/////////////////////////////////////////////////////////////////////////
-export default function TodoList() {
+// ----------------------------------------------------------------
+export default function TodoListAll() {
     
     // Get user Id
     const { userId } = useAuth();
@@ -71,15 +71,13 @@ export default function TodoList() {
     const [newItem, setNewItem] = React.useState<string>("");
     const [items, setItems] = React.useState <{ userId: string; id: string; value: string; date: Date; done: boolean; starred: boolean }[]> ([]);
 
-    // const [done, setDone] = React.useState<boolean>(false);
+    // -----------------------
+    // --- CRUD functions ---
+    // -----------------------
 
-    // ------------------------
-    // --- Helper functions ---
-    // ------------------------
-
-    /////////////////////////////////////////
+    
     // Function to add an item to to-do list
-    /////////////////////////////////////////
+    //////////////////////////////////////////////
     async function addItem() 
     {
         // Ensure empty inputs are not added (invalid)
@@ -271,7 +269,7 @@ export default function TodoList() {
             setItems(sortedNewList);
         }
         fetchData();
-    }, []);
+    }, [userId]);
     // ----------------------------------------------------------
 
 

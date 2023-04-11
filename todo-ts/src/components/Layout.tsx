@@ -19,10 +19,8 @@ import { useRouter } from 'next/navigation';
 import { UserButton } from '@clerk/nextjs';
 
 // Custom component imports
-import Header from '@/components/Header';
-import Sidebar from '@/components/Sidebar';
-import TodoListAll from '@/components/AllPage';
-import Test from '@/components/Test';
+import Header from './Header';
+import Sidebar from './Sidebar';
 
 // ------------------
 // Const variables
@@ -54,22 +52,21 @@ export default function TodosPageLayout() {
 
         {/* Content */}
         <Box sx={{ flexGrow: 1, p: 3 }}>
-            <Toolbar />
 
+            <Toolbar />
             {/* Today's date */}
             <Card sx={{mt: -4}} >
-              <CardContent>
-                  <Typography>
-                  <WbSunnyIcon/>
-                  <span> </span> Friday, April 6th
-                  </Typography>
-              </CardContent>
+            <CardContent>
+                <Typography>
+                <WbSunnyIcon/>
+                <span> </span> Friday, April 6th
+                </Typography>
+            </CardContent>
             </Card>
 
-          {/* <TodoListAll/> */}
-          <Test/>
 
         </Box>
+
     </Box>
   );
 }
