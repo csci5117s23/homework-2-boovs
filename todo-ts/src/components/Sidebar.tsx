@@ -11,7 +11,7 @@ import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
-import Button from ''
+import Button from '@mui/material/Button'
 
 // MUI Icons
 import ListItemIcon from '@mui/material/ListItemIcon';
@@ -20,7 +20,8 @@ import ChecklistRtlTwoToneIcon from '@mui/icons-material/ChecklistRtlTwoTone';
 import CheckCircleTwoToneIcon from '@mui/icons-material/CheckCircleTwoTone';
 import StarIcon from '@mui/icons-material/Star';
 import CategoryIcon from '@mui/icons-material/Category';
-
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+import AddBoxIcon from '@mui/icons-material/AddBox';
 
 // Next JS Imports
 import Link from 'next/link'
@@ -28,6 +29,7 @@ import { useRouter } from 'next/navigation';
 
 // Clerk Authorization imports
 import { UserButton } from '@clerk/nextjs';
+
 
 // -------------------------
 // Main export function
@@ -41,6 +43,13 @@ export default function Sidebar( {drawerWidth}: SideBarProps ) {
     // Const variables
     // ----------------------------
     const theme = useTheme();
+
+    // -----------------------------------------------------
+    // Function to handle on clicks for handle click button
+    // -----------------------------------------------------
+    async function addCategory() {
+        console.log("clicked");
+    }
 
     // ----------------------------
     // Return statement
@@ -130,8 +139,22 @@ export default function Sidebar( {drawerWidth}: SideBarProps ) {
                 </ListItemButton>
             </ListItem>
 
-            <Button>
+            <Divider/>
+            
+            {/* Add category button */}
+            <ListItem key={"AddCategories"} disablePadding>
+                {/* <ListItemButton> */}
+                    <Button variant="outlined">
+                        Add a category 
+                        <AddBoxIcon/>
+                    </Button>
+                {/* </ListItemButton> */}
+            </ListItem>
 
+            <Button 
+                variant="outlined" 
+                onClick={ () => addCategory()} 
+                startIcon={<DeleteForeverIcon />}>
 
             </Button>
             
@@ -139,4 +162,5 @@ export default function Sidebar( {drawerWidth}: SideBarProps ) {
       </Drawer>
     </>
   );
+
 }
