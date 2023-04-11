@@ -86,22 +86,23 @@ export default function TaskEditor() {
   }
 
 
-  // Function to edit dom
-  async function editDom(task: any) {
-    console.log('Clickled');
-    const updatedObject = tasks.map((t) =>
-      t._id === task.id ? !task.done : task.done
-    );
-  }
+  // // Mark a to-do task to the react DOM
+  // async function markDone(task: any) {
+  //   // Toggle 'done' status for this task
+  //   const newList = tasks.map((item) => {
+  //     if (item._id === task._id) {
+  //       // Update state checkmark for selected task
+  //       const updatedItem = {
+  //           ...item, done: !task.done,
+  //       }; return updatedItem;
+  //     } return item;
+  //   });
+  //   setTasks(newList);
 
-  // Mark a to-do task to the react DOM
-  async function markDone(task: any) {
-    task.done = !task.done;
-    const token = await getToken({ template: JWT_TEMPLATE_NAME });
-    const newTask = await updateTask(token, task);
-    // setTaskDone("");
-    // setTasks(tasks.concat(newTask));
-  }
+  //   // Send PUT request to modify
+  //   const token = await getToken({ template: JWT_TEMPLATE_NAME });
+  //   const newTask = await updateTask(token, task);
+  // }
 
 
   // Add a to-do task to the react DOM
@@ -182,7 +183,7 @@ export default function TaskEditor() {
                                       <Checkbox {...label}
                                           color="success"
                                           checked={task.done}
-                                          onChange={ () => editDom(task) }
+                                          onChange={ () => markDone(task) }
                                           inputProps={{ 'aria-label': 'controlled' }}
                                       />
                                       {task.done ? 'Done' : 'Incomplete'}
