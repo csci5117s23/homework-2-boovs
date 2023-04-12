@@ -268,46 +268,47 @@ export default function TaskEditor() {
 
 
           {/* Editor for current task */}
-          <ListItem key="editor">
-            <Card variant="outlined" sx={{ minWidth: '100%', minHeight: '50vh' }}>
-              <CardContent>
-                <Typography variant="h6"> Change Task </Typography>
-              </CardContent>
-              <CardActions>
-                <TextField
-                    id="outlined-multiline-static"
-                    label="Type here..."
-                    multiline
-                    rows={2}
-                    sx={{ width: '100%' }}
-                  />
-              </CardActions>
+          { pathname == "/todos/[id]" && 
+            <ListItem key="editor">
+              <Card variant="outlined" sx={{ minWidth: '100%', minHeight: '50vh' }}>
+                <CardContent>
+                  <Typography variant="h6"> Change Task </Typography>
+                </CardContent>
+                <CardActions>
+                  <TextField
+                      id="outlined-multiline-static"
+                      label="Type here..."
+                      multiline
+                      rows={2}
+                      sx={{ width: '100%' }}
+                    />
+                </CardActions>
 
-              <CardContent>
-                <Typography variant="h6"> Change categories </Typography>
+                <CardContent>
+                  <Typography variant="h6"> Change categories </Typography>
 
-                <Box
-                  sx={{
-                    display: 'flex',
-                    '& > :not(style)': {
-                      m: 1,
-                      width: '50%',
-                      height: 128,
-                    },
-                  }}
-                >
-                <Paper variant="outlined"> </Paper>
-                <Paper variant="outlined" square />
-              </Box>
+                  <Box
+                    sx={{
+                      display: 'flex',
+                      '& > :not(style)': {
+                        m: 1,
+                        width: '50%',
+                        height: 128,
+                      },
+                    }}
+                  >
+                  <Paper variant="outlined"> </Paper>
+                  <Paper variant="outlined" square />
+                </Box>
 
-              </CardContent>
-              <CardActions>
-                <ChipsArray/>
-              </CardActions>
-            </Card>
+                </CardContent>
+                <CardActions>
+                </CardActions>
+              </Card>
 
-            
-          </ListItem>
+              
+            </ListItem>
+          }
        
         </List>
 
