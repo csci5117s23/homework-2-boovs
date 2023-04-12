@@ -111,7 +111,7 @@ export default function Sidebar( {drawerWidth}: SideBarProps ) {
                 <Divider /> 
 
                 {/* Task categories */}
-                <Link href={{ pathname: './todos' }}>
+                <Link href={{ pathname: '/todos' }}>
                     <ListItem key={"Tasks"} disablePadding>
                         <ListItemButton>
                             <ListItemIcon>
@@ -123,7 +123,7 @@ export default function Sidebar( {drawerWidth}: SideBarProps ) {
                 </Link>
 
                 {/* Starred category */}
-                <Link href={{ pathname: './starred' }}>
+                <Link href={{ pathname: '/starred' }}>
                     <ListItem key={"Starred"} disablePadding>
                         <ListItemButton>
                             <ListItemIcon>
@@ -135,7 +135,7 @@ export default function Sidebar( {drawerWidth}: SideBarProps ) {
                 </Link>
                 
                 {/* Done category */}
-                <Link href={{ pathname: './done' }}>
+                <Link href={{ pathname: '/done' }}>
                     <ListItem key={"Done"} disablePadding>
                         <ListItemButton>
                             <ListItemIcon>
@@ -147,7 +147,7 @@ export default function Sidebar( {drawerWidth}: SideBarProps ) {
                 </Link>
 
                 {/* 'Unfinished' category */}
-                <Link href={{ pathname: './unfinished' }}>
+                <Link href={{ pathname: '/unfinished' }}>
                     <ListItem key={"Unfinished"} disablePadding>
                         <ListItemButton>
                             <ListItemIcon>

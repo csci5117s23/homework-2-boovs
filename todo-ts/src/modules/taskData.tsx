@@ -40,7 +40,7 @@ export async function getStarredTasks(authToken: any) {
     return tasks.filter((task: any) => (task.starred === true))
 }
 
-export async function getIdTask(authToken: any, taskId: string) {
+export async function getIdTask(authToken: any, taskId: any) {
     const result = await fetch(backend_base+route,{
         'method':'GET',
         'headers': {

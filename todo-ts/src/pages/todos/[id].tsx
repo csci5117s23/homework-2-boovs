@@ -64,7 +64,7 @@ export default function TodosPageLayout() {
             </Card>
 
             {/* Task content controller */}
-            <TaskEditor page="todos/id"/>
+            <TaskEditor/>
 
         </Box>
     </Box>

@@ -21,7 +21,7 @@ export async function getCategories(authToken: any) {
 // ------------------------------------------------
 // POST Functions
 // ------------------------------------------------
-export async function postCategory(authToken: any, categoryText: string) {
+export async function postCategory(authToken: any, categoryText: any) {
     const result = await fetch(backend_base+route,{
         'method':'POST',
         'headers': {

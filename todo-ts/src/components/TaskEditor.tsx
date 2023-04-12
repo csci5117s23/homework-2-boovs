@@ -31,6 +31,7 @@ import { useAuth } from "@clerk/nextjs";
 // DB Function imports
 import { 
   getTasks, 
+  getIdTask,
   getDoneTasks, 
   getStarredTasks,
   postTask, 
@@ -55,8 +56,9 @@ interface TaskType {
 // --------------------------------------------------------------------------
 // --------------------------------------------------------------------------
 export default function TaskEditor() {
-  const { pathname } = useRouter();
+  const { pathname, query } = useRouter();
 
+  
   const JWT_TEMPLATE_NAME = "codehooks-todo";
 
   const { isLoaded, userId, sessionId, getToken } = useAuth();
@@ -134,25 +136,32 @@ export default function TaskEditor() {
   useEffect(() => {
     async function process() {
       // Todo page
-      if ((userId) && (pathname == "todos")) {
+      if ((userId) && (pathname == "/todos")) {
         const token = await getToken({ template: JWT_TEMPLATE_NAME});
         setTasks(await getTasks(token));
         setLoading(false);
       }
+      // Edit task page
+      if ((userId) && (pathname == "/todos/[id]")) {
+        console.log("We got it boys");
+        const token = await getToken({ template: JWT_TEMPLATE_NAME});
+        setTasks(await getIdTask(token, query.id));
+        setLoading(false);
+      }
       // Done page
-      if ((userId) && (pathname == "done")) {
+      if ((userId) && (pathname == "/done")) {
         const token = await getToken({ template: JWT_TEMPLATE_NAME});
         setTasks(await getDoneTasks(token, true));
         setLoading(false);
       }
       // Unfinished page
-      if ((userId) && (pathname == "unfinished")) {
+      if ((userId) && (pathname == "/unfinished")) {
         const token = await getToken({ template: JWT_TEMPLATE_NAME});
         setTasks(await getDoneTasks(token, false));
         setLoading(false);
       }
       // Starred page
-      if ((userId) && (pathname == "starred")) {
+      if ((userId) && (pathname == "/starred")) {
         const token = await getToken({ template: JWT_TEMPLATE_NAME});
         setTasks(await getStarredTasks(token));
         setLoading(false);
@@ -169,8 +178,8 @@ export default function TaskEditor() {
   // ----------------------------------------------------
   if (loading) {
     return (
-      <>
-        <span> loading... <CircularProgress /> </span>
+      <> 
+        loading... <CircularProgress />
       </>
     );
   }
@@ -179,7 +188,7 @@ export default function TaskEditor() {
     return (
       <>
         {/* Add task feature only shows on 'todo' page */}
-        {(pathname === "todos") && 
+        {(pathname === "/todos") && 
           <Box sx={{ mt: 2 }}>
             <TextField 
                 sx={{ minWidth: '100%', mt: 1}}
