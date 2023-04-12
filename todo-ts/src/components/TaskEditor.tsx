@@ -8,20 +8,24 @@ import Typography from '@mui/material/Typography';
 import ListItem from '@mui/material/ListItem';
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
-import CardContent from '@mui/material/CardContent';import Button from '@mui/material/Button';
+import CardContent from '@mui/material/CardContent';
+import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Checkbox from '@mui/material/Checkbox';
+import CircularProgress from '@mui/material/CircularProgress';
 
 // MUI Icon Imports
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
 import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
 import EditTwoToneIcon from '@mui/icons-material/EditTwoTone';
-import DoneOutlineTwoToneIcon from '@mui/icons-material/DoneOutlineTwoTone';
 import StarIcon from '@mui/icons-material/Star';
 import StarBorderIcon from '@mui/icons-material/StarBorder';
 
 // Next JS Imports
-import Link from 'next/link'
+import Link from 'next/link';
+import { useRouter } from 'next/router';
+
+// Clerk imports
 import { useAuth } from "@clerk/nextjs";
 
 // DB Function imports
@@ -50,7 +54,9 @@ interface TaskType {
 
 // --------------------------------------------------------------------------
 // --------------------------------------------------------------------------
-export default function TaskEditor( {page}: any ) {
+export default function TaskEditor() {
+  const { pathname } = useRouter();
+
   const JWT_TEMPLATE_NAME = "codehooks-todo";
 
   const { isLoaded, userId, sessionId, getToken } = useAuth();
@@ -122,32 +128,31 @@ export default function TaskEditor( {page}: any ) {
     const newTask = await updateTask(token, updatedTask);
   }
 
-
   // -------------------------------------
   // Load in signed-in user
   // -------------------------------------
   useEffect(() => {
     async function process() {
       // Todo page
-      if ((userId) && (page === "todos")) {
+      if ((userId) && (pathname == "todos")) {
         const token = await getToken({ template: JWT_TEMPLATE_NAME});
         setTasks(await getTasks(token));
         setLoading(false);
       }
       // Done page
-      if ((userId) && (page === "done")) {
+      if ((userId) && (pathname == "done")) {
         const token = await getToken({ template: JWT_TEMPLATE_NAME});
         setTasks(await getDoneTasks(token, true));
         setLoading(false);
       }
       // Unfinished page
-      if ((userId) && (page === "unfinished")) {
+      if ((userId) && (pathname == "unfinished")) {
         const token = await getToken({ template: JWT_TEMPLATE_NAME});
         setTasks(await getDoneTasks(token, false));
         setLoading(false);
       }
       // Starred page
-      if ((userId) && (page === "starred")) {
+      if ((userId) && (pathname == "starred")) {
         const token = await getToken({ template: JWT_TEMPLATE_NAME});
         setTasks(await getStarredTasks(token));
         setLoading(false);
@@ -163,13 +168,18 @@ export default function TaskEditor( {page}: any ) {
   // ----------------------------------------------------
   // ----------------------------------------------------
   if (loading) {
-    return <span> loading... </span>;
+    return (
+      <>
+        <span> loading... <CircularProgress /> </span>
+      </>
+    );
   }
   else {
+
     return (
       <>
         {/* Add task feature only shows on 'todo' page */}
-        {(page === "todos") && 
+        {(pathname === "todos") && 
           <Box sx={{ mt: 2 }}>
             <TextField 
                 sx={{ minWidth: '100%', mt: 1}}
@@ -187,40 +197,34 @@ export default function TaskEditor( {page}: any ) {
                 onClick={ () => add() }
             >
                 <AddRoundedIcon/> Add
-            </Button>    
-        </Box>
+            </Button>   
+             
+          </Box>
         }
 
         {/* List of items */}
         <List>
           {tasks.map(task => {
               return (
-                  // -------------------------------------------------------------------------------------------------
                   // Todo list entry
                   <ListItem key={task._id}> 
                       <Card variant="outlined" sx={{ minWidth: '100%' }}>
                           {/* Displayed content */}
                           <CardContent>
-
                               {/* Date made */}
                               <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
                                   {formatDate2(new Date(task.createdOn))}
                               </Typography>
-
                               {/* Task title */}
                               <Typography  sx={{ mb: -2 }} variant="h6" component="div">
                                   {task.value}
                               </Typography>
-                              
                           </CardContent>
-                          
                           {/* Edit/delete buttons */}
                           <CardActions sx={{ display: 'flex' }}>
-                              
                               {/* Completion button */}
                               <Box sx={{ flexGrow: 1 }}>
                                   <Box sx={{ flexGrow: 1 }}/>
-
                                   {/* Done button */}
                                   <Button onClick={ () => markDone(task) }>
                                       <Checkbox
@@ -229,30 +233,24 @@ export default function TaskEditor( {page}: any ) {
                                       />
                                       { task.done ? 'Done' : 'Unfinished' }
                                   </Button>
-
                                   {/* Star button */}
                                   <Button onClick={ () => markStarred(task) }>
                                       { task.starred ? <><StarIcon/></> : <><StarBorderIcon/></> }
                                   </Button>
                               </Box>
-
                               {/* Edit button */}
                               <Link href={{ pathname: './todos/[id]', query: { id: task._id } }} as="/todos/[id]">
                                   <Button size="small">
                                       <EditTwoToneIcon/> Edit
                                   </Button>
                               </Link>
-
                               {/* Delete button */}
                               <Button size="small" onClick={ () => del(task._id) }>
                                   <CloseOutlinedIcon/> Delete
                               </Button>
-                              
                           </CardActions>
-
                       </Card>                                
                   </ListItem>
-                  // -------------------------------------------------------------------------------------------------
           )})}
         </List>
       </>

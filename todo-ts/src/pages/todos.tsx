@@ -23,7 +23,7 @@ import Header from '@/components/Header';
 import Sidebar from '@/components/Sidebar';
 import TodoListAll from '@/components/AllPage';
 import TaskEditor from '@/components/TaskEditor';
-import { formatDate, formatDate2 } from '../modules/dateFormatter';
+import { formatDate, formatDate2 } from '@/modules/dateFormatter';
 
 // ------------------
 // Const variables
@@ -64,9 +64,8 @@ export default function TodosPageLayout() {
                 </Typography>
             </Card>
 
-          {/* <TodoListAll/> */}
-          {/* Task content controller */}
-            <TaskEditor page="todos"/>
+            {/* Task content controller */}
+            <TaskEditor/>
 
         </Box>
     </Box>

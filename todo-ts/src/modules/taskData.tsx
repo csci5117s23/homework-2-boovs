@@ -29,7 +29,6 @@ export async function getDoneTasks(authToken: any, done: boolean) {
     return tasks.filter((task: any) => (task.done === done))
 }
 
-
 export async function getStarredTasks(authToken: any) {
     const result = await fetch(backend_base+route,{
         'method':'GET',
@@ -41,9 +40,19 @@ export async function getStarredTasks(authToken: any) {
     return tasks.filter((task: any) => (task.starred === true))
 }
 
+export async function getIdTask(authToken: any, taskId: string) {
+    const result = await fetch(backend_base+route,{
+        'method':'GET',
+        'headers': {
+            'Authorization': 'Bearer ' + authToken,
+        }
+    })
+    const tasks = await result.json();
+    return tasks.filter((task: any) => (task._id === taskId))
+}
 
 // ------------------------------------------------
-// 
+// POST Functions
 // ------------------------------------------------
 export async function postTask(authToken: any, taskText: string) {
     const result = await fetch(backend_base+route,{
@@ -56,13 +65,15 @@ export async function postTask(authToken: any, taskText: string) {
             value:      taskText,
             done:       false,
             starred:    false,
-        }
-        )
+        })
     })
     return await result.json();
 }
 
 
+// ------------------------------------------------
+// PUT Functions 
+// ------------------------------------------------
 export async function updateTask(authToken: any, task: any) {
     const result = await fetch(backend_base+route+"/"+task._id, {
         'method':'PUT',
@@ -74,6 +85,9 @@ export async function updateTask(authToken: any, task: any) {
 }
 
 
+// ------------------------------------------------
+// DELETE Functions 
+// ------------------------------------------------
 export async function deleteTask(authToken: any, taskId: any) {
     const result = await fetch(backend_base+route+"/"+taskId,{
         'method':'DELETE',

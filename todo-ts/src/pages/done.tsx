@@ -64,9 +64,8 @@ export default function TodosPageLayout() {
                 </Typography>
             </Card>
 
-          {/* <TodoListAll/> */}
           {/* Task content controller */}
-            <TaskEditor page="done"/>
+            <TaskEditor />
 
         </Box>
     </Box>
