@@ -13,6 +13,7 @@ import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Checkbox from '@mui/material/Checkbox';
 import CircularProgress from '@mui/material/CircularProgress';
+import Paper from "@mui/material/Paper";
 
 // MUI Icon Imports
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
@@ -43,6 +44,8 @@ import {
   formatDate2 
 } from '../modules/dateFormatter';
 
+// Custom component imports
+import ChipsArray from "./ChipsArray";
 
 // Type for to-do tasks
 interface TaskType {
@@ -261,7 +264,54 @@ export default function TaskEditor() {
                       </Card>                                
                   </ListItem>
           )})}
+
+
+
+          {/* Editor for current task */}
+          <ListItem key="editor">
+            <Card variant="outlined" sx={{ minWidth: '100%', minHeight: '50vh' }}>
+              <CardContent>
+                <Typography variant="h6"> Change Task </Typography>
+              </CardContent>
+              <CardActions>
+                <TextField
+                    id="outlined-multiline-static"
+                    label="Type here..."
+                    multiline
+                    rows={2}
+                    sx={{ width: '100%' }}
+                  />
+              </CardActions>
+
+              <CardContent>
+                <Typography variant="h6"> Change categories </Typography>
+
+                <Box
+                  sx={{
+                    display: 'flex',
+                    '& > :not(style)': {
+                      m: 1,
+                      width: '50%',
+                      height: 128,
+                    },
+                  }}
+                >
+                <Paper variant="outlined"> </Paper>
+                <Paper variant="outlined" square />
+              </Box>
+
+              </CardContent>
+              <CardActions>
+                <ChipsArray/>
+              </CardActions>
+            </Card>
+
+            
+          </ListItem>
+       
         </List>
+
+        
       </>
     )
         

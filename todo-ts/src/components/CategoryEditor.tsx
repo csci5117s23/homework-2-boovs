@@ -141,8 +141,8 @@ export default function CategoryEditor( {page}: any ) {
         {/* Add category popup */}
         <Box>
             <Box>
-                <Button variant="outlined" onClick={handleClickOpen}>
-                    <AddBoxIcon /> Add a category 
+                <Button variant="outlined" startIcon={<AddBoxIcon/>} onClick={handleClickOpen}>
+                    Add category
                 </Button>
                 <Dialog open={open} onClose={handleClose}>
                     <DialogTitle>Add a category</DialogTitle>

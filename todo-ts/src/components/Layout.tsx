@@ -28,7 +28,7 @@ import { formatDate, formatDate2 } from '../modules/dateFormatter';
 // ------------------
 // Const variables
 // ------------------
-const drawerWidth = 240;
+const drawerWidth = 200;
 
 // --------------------------------
 // Main component export function
