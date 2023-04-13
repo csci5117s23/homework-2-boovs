@@ -60,7 +60,6 @@ interface TaskType {
 // --------------------------------------------------------------------------
 export default function Parent() {
   const { pathname, query } = useRouter();
-
   
   const JWT_TEMPLATE_NAME = "codehooks-todo";
 
@@ -69,6 +68,7 @@ export default function Parent() {
   
   const [tasks, setTasks] = useState<TaskType[]>([]);
   const [addTaskText, setAddTaskText] = useState<string>("");
+  const [editTaskText, setEditTaskText] = useState<string>("");
 
   // -------------------------------------
   // Add a to-do task to the react DOM
@@ -83,11 +83,13 @@ export default function Parent() {
   // -------------------------------------
   // Edit a to-do task to the react DOM
   // -------------------------------------
-  async function edit(task: any, taskText: string) {
+  async function edit(task: any) {
+    // Set new task to have user-inputted text
+    const updatedTask = {...task, value: editTaskText }
     const token = await getToken({ template: JWT_TEMPLATE_NAME });
-    const newTask = await updateTask(token, task, taskText);
-    setAddTaskText("");
-    setTasks(tasks.concat(newTask));
+    const newTask = await updateTask(token, updatedTask);
+    setEditTaskText("");
+    setTasks([newTask]);
   }
 
   // -------------------------------------
@@ -100,7 +102,7 @@ export default function Parent() {
     } catch (e) {
       console.log(e);
     }
-    setTasks(await getTasks(token));
+    setTasks(await getTasks(token))
   }
 
 
@@ -120,7 +122,7 @@ export default function Parent() {
 
     // Send PUT request to DB
     const token = await getToken({ template: JWT_TEMPLATE_NAME });
-    const newTask = await updateTask(token, task._id, updatedTask);
+    const newTask = await updateTask(token, updatedTask);
   }
 
 
@@ -140,7 +142,7 @@ export default function Parent() {
 
     // Send PUT request to DB
     const token = await getToken({ template: JWT_TEMPLATE_NAME });
-    const newTask = await updateTask(token, task._id, updatedTask);
+    const newTask = await updateTask(token, updatedTask);
   }
 
   // -------------------------------------
@@ -228,119 +230,109 @@ export default function Parent() {
         <List>
           {tasks.map(task => {
               return (
+
                   // Todo list entry
                   <ListItem key={task._id} sx={{display: 'flex', flexDirection: 'column', p: 1}}> 
-                        <Card variant="outlined" sx={{ minWidth: '100%' }}>
-                          {/* Displayed content */}
-                          <CardContent>
-                              {/* Date made */}
-                              <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-                                  {formatDate2(new Date(task.createdOn))}
-                              </Typography>
-                              {/* Task title */}
-                              <Typography  sx={{ mb: -2 }} variant="h6" component="div">
-                                  {task.value}
-                              </Typography>
-                          </CardContent>
-                          {/* Edit/delete buttons */}
-                          <CardActions sx={{ display: 'flex' }}>
-                              {/* Completion button */}
-                              <Box sx={{ flexGrow: 1 }}>
-                                  <Box sx={{ flexGrow: 1 }}/>
-                                  {/* Done button */}
-                                  <Button onClick={ () => markDone(task) }>
-                                      <Checkbox
-                                          color="success"
-                                          checked={task.done}
-                                      />
-                                      { task.done ? 'Done' : 'Unfinished' }
-                                  </Button>
-                                  {/* Star button */}
-                                  <Button onClick={ () => markStarred(task) }>
-                                      { task.starred ? <><StarIcon/></> : <><StarBorderIcon/></> }
-                                  </Button>
-                              </Box>
-
-                              {/* Edit button */}
-                              { pathname != "/todos/[id]" && 
-                                <Link href={{ pathname: './todos/[id]', query: { id: task._id } }} as="/todos/[id]">
-                                    <Button size="small">
-                                        <EditTwoToneIcon/> Edit
-                                    </Button>
-                                </Link>
-                              }
-
-                              {/* Delete button */}
-                              <Button size="small" onClick={ () => del(task._id) }>
-                                  <CloseOutlinedIcon/> Delete
+                    <Card variant="outlined" sx={{ minWidth: '100%' }}>
+                      {/* Displayed content */}
+                      <CardContent>
+                          {/* Date made */}
+                          <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+                              {formatDate2(new Date(task.createdOn))}
+                          </Typography>
+                          {/* Task title */}
+                          <Typography  sx={{ mb: -2 }} variant="h6" component="div">
+                              {task.value}
+                          </Typography>
+                      </CardContent>
+                      {/* Edit/delete buttons */}
+                      <CardActions sx={{ display: 'flex' }}>
+                          {/* Completion button */}
+                          <Box sx={{ flexGrow: 1 }}>
+                              <Box sx={{ flexGrow: 1 }}/>
+                              {/* Done button */}
+                              <Button onClick={ () => markDone(task) }>
+                                  <Checkbox
+                                      color="success"
+                                      checked={task.done}
+                                  />
+                                  { task.done ? 'Done' : 'Unfinished' }
                               </Button>
-                          </CardActions>
-                      </Card>
-                      
-
-                      { pathname == "/todos/[id]" && 
-                        <Card variant="outlined" sx={{ minWidth: '100%', minHeight: '50vh', mt: 2 }}>
-                          <CardContent sx={{ display: 'flex', justifyContent: 'space-between'}}>
-                            <Typography variant="h6"> Change Task </Typography>
-                            {/* Delete button */}
-                            <Button size="small" onClick={ () => del(task._id) }>
-                                  <CloseOutlinedIcon/> Delete
+                              {/* Star button */}
+                              <Button onClick={ () => markStarred(task) }>
+                                  { task.starred ? <><StarIcon/></> : <><StarBorderIcon/></> }
                               </Button>
-                          </CardContent>
-                          <CardActions>
-                            
-                            <TextField
-                                id="outlined-multiline-static"
-                                label="Type here..."
-                                multiline
-                                rows={2}
-                                sx={{ width: '100%' }}
-                                value={addTaskText}
-                                onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                                  setAddTaskText(event.target.value);
-                                }}
-                            />
-                          <Button 
-                              sx={{ mt: 1 }}
-                              variant="outlined" 
-                              onClick={ () => edit( task, addTaskText) }
-                          >
-                              <AddRoundedIcon/> Edit
-                          </Button>  
-                          
-                          </CardActions>
-
-                          <CardContent>
-                            <Typography variant="h6"> Change categories </Typography>
-
-                            <Box
-                              sx={{
-                                display: 'flex',
-                                '& > :not(style)': {
-                                  m: 1,
-                                  width: '50%',
-                                  height: 128,
-                                },
-                              }}
-                            >
-                            <Paper variant="outlined"> </Paper>
-                            <Paper variant="outlined" square />
                           </Box>
 
-                        
-                      
+                          {/* Edit button */}
+                          { pathname != "/todos/[id]" && 
+                          <>
+                            <Link href={{ pathname: '/todos/' + task._id }}>
+                                <Button size="small">
+                                    <EditTwoToneIcon/> Edit
+                                </Button>
+                            </Link>
 
-                          </CardContent>
-                          <CardActions>
-                          </CardActions>
-                        </Card>
-                      }
+                            {/* Delete button */}
+                          <Button size="small" onClick={ () => del(task._id) }>
+                              <CloseOutlinedIcon/> Delete
+                          </Button>
+                          </>
+                          }
+                      </CardActions>
+                  </Card>
+                  
 
-                  </ListItem>
+
+                  { pathname == "/todos/[id]" && 
+                    <Card variant="outlined" sx={{ minWidth: '100%', minHeight: '50vh', mt: 2 }}>
+                      <CardContent sx={{ display: 'flex', justifyContent: 'space-between'}}>
+                        <Typography variant="h6"> Change Task </Typography>
+                      </CardContent>
+                      <CardActions>
+                        <TextField
+                            id="outlined-multiline-static"
+                            label="Type here..."
+                            multiline
+                            rows={2}
+                            sx={{ width: '100%' }}
+                            value={editTaskText}
+                            onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                              setEditTaskText(event.target.value);
+                            }}
+                        />
+                      </CardActions>
+                      <CardContent>
+                        <Typography variant="h6"> Change categories </Typography>
+
+                        <Box
+                          sx={{
+                            display: 'flex',
+                            '& > :not(style)': {
+                              m: 1,
+                              width: '50%',
+                              height: 128,
+                            },
+                          }}
+                        >
+                        <Paper variant="outlined"> </Paper>
+                        <Paper variant="outlined" square />
+                      </Box>
+                      </CardContent>
+                        <CardActions sx={{display: "flex", justifyContent: "flex-end" }}>
+                        <Button 
+                            sx={{ mt: 5 }}
+                            variant="outlined" 
+                            onClick={ () => edit( task ) }
+                        >
+                            <AddRoundedIcon/> Edit
+                        </Button>  
+                      </CardActions>
+                    </Card>
+                  }
+              </ListItem>
           )})}       
         </List>
-
-        
       </>
     )
         

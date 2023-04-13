@@ -2,6 +2,8 @@
 import '../styles/globals.css'
 import React, { useState, useEffect } from 'react';
 import type { AppProps } from 'next/app'
+import Link from 'next/link';
+import Card from '@mui/material/Card';
 
 // Component Imports
 import SignInPage from '../components/SignInPage'
@@ -17,6 +19,7 @@ import {
   useUser,
   useAuth,
 } from '@clerk/nextjs';
+
 
 // CLERK Publishable Key
 const NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY= "pk_test_ZmxleGlibGUtbWFuYXRlZS0xLmNsZXJrLmFjY291bnRzLmRldiQ";
@@ -34,7 +37,9 @@ function MyApp({ Component, pageProps }: AppProps) {
 
       {/* User logged in */}
       <SignedIn>  
-        <UserButton/>
+        <Card sx={{ backgroundColor: 'grey', textAlign: 'center'}}>
+          <Link href="/todos">Go back home.</Link>
+        </Card>
         <Component {...pageProps} />
       </SignedIn>
 

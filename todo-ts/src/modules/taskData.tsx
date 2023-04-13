@@ -74,15 +74,15 @@ export async function postTask(authToken: any, taskText: string) {
 // ------------------------------------------------
 // PUT Functions 
 // ------------------------------------------------
-export async function updateTask(authToken: any, task: any, taskText: string) {
+export async function updateTask(authToken: any, task: any) {
     const result = await fetch(backend_base+route+"/"+task._id, {
         'method':'PUT',
         'headers': {'Authorization': 'Bearer ' + authToken,
         'Content-Type': 'application/json'},
         'body': JSON.stringify({
-            value:      taskText,
-            done:       false,
-            starred:    false,
+            value:      task.value,
+            done:       task.done,
+            starred:    task.starred,
             createdOn:  new Date()
         })
     });

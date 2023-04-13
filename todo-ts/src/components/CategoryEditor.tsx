@@ -22,6 +22,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import Tooltip from '@mui/material/Tooltip'
+import Chip from '@mui/material/Chip'
 
 // MUI Icons
 import ListItemIcon from '@mui/material/ListItemIcon';
@@ -139,7 +140,7 @@ export default function CategoryEditor( {page}: any ) {
     return (
       <>
         {/* Add category popup */}
-        <Box>
+        <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: 0, margin: 1.5}}>
             <Box>
                 <Button variant="outlined" startIcon={<AddBoxIcon/>} onClick={handleClickOpen}>
                     Add category
@@ -174,13 +175,15 @@ export default function CategoryEditor( {page}: any ) {
                 {categories.map(category => {
                     return (
                         <ListItem key={category._id}>
-                            <Card>
-                                {category.value}
-                                <Tooltip title="Delete">
-                                    <IconButton onClick={ () => del(category._id) }>
-                                        <DeleteIcon />
-                                    </IconButton>
-                                </Tooltip>
+                          <Card sx={{ display: 'flex', justifyContent: 'space-between', minWidth: '20vh', backgroundColor: 'darkgrey', padding: 0}}>
+                            <Link href={{ pathname: '/categories/' + category._id }}>
+                              <CardContent>
+                                <Typography>{category.value}</Typography>
+                              </CardContent>
+                            </Link>
+                              <IconButton aria-label="delete" onClick={ () => del(category._id) }>
+                                <DeleteIcon fontSize="inherit" />
+                              </IconButton>
                             </Card>
                         </ListItem>
                         )
