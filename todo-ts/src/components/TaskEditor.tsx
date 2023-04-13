@@ -146,10 +146,10 @@ export default function TaskEditor() {
       }
       // Edit task page
       if ((userId) && (pathname == "/todos/[id]")) {
-        console.log("We got it boys");
         const token = await getToken({ template: JWT_TEMPLATE_NAME});
         setTasks(await getIdTask(token, query.id));
         setLoading(false);
+        console.log(tasks);
       }
       // Done page
       if ((userId) && (pathname == "/done")) {
@@ -182,7 +182,7 @@ export default function TaskEditor() {
   if (loading) {
     return (
       <> 
-        loading... <CircularProgress />
+        <CircularProgress />
       </>
     );
   }
@@ -270,18 +270,35 @@ export default function TaskEditor() {
           {/* Editor for current task */}
           { pathname == "/todos/[id]" && 
             <ListItem key="editor">
-              <Card variant="outlined" sx={{ minWidth: '100%', minHeight: '50vh' }}>
-                <CardContent>
+              <Card variant="outlined" sx={{ minWidth: '100%', minHeight: '50vh', mt: 2 }}>
+                <CardContent sx={{ display: 'flex', justifyContent: 'space-between'}}>
                   <Typography variant="h6"> Change Task </Typography>
+                  {/* Delete button */}
+                  <Button size="small" onClick={ () => del(task._id) }>
+                        <CloseOutlinedIcon/> Delete
+                    </Button>
                 </CardContent>
                 <CardActions>
+                  
                   <TextField
                       id="outlined-multiline-static"
                       label="Type here..."
                       multiline
                       rows={2}
                       sx={{ width: '100%' }}
-                    />
+                      value={addTaskText}
+                      onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                        setAddTaskText(event.target.value);
+                      }}
+                  />
+                <Button 
+                    sx={{ mt: 1 }}
+                    variant="outlined" 
+                    onClick={ () => edit( task, addTaskText) }
+                >
+                    <AddRoundedIcon/> Edit
+                </Button>  
+                
                 </CardActions>
 
                 <CardContent>
@@ -301,12 +318,13 @@ export default function TaskEditor() {
                   <Paper variant="outlined" square />
                 </Box>
 
+              
+            
+
                 </CardContent>
                 <CardActions>
                 </CardActions>
               </Card>
-
-              
             </ListItem>
           }
        
