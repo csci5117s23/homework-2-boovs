@@ -46,6 +46,7 @@ import {
 
 // Custom component imports
 import ChipsArray from "./ChipsArray";
+import CategoryEditor from "./CategoryEditor";
 
 // Type for to-do tasks
 interface TaskType {
@@ -310,13 +311,18 @@ export default function Parent() {
                             display: 'flex',
                             '& > :not(style)': {
                               m: 1,
-                              width: '50%',
+                              width: '100%',
                               height: 128,
                             },
                           }}
                         >
-                        <Paper variant="outlined"> </Paper>
-                        <Paper variant="outlined" square />
+                        <Paper variant="outlined">
+                          {/* Message for users who have 0 categories */}
+                          
+                            <CategoryEditor/>
+                            <Typography sx={{display: 'flex', justifyContent: 'center'}}>You don&apos;t seem to have any categories.</Typography>  
+                          
+                          </Paper>
                       </Box>
                       </CardContent>
                         <CardActions sx={{display: "flex", justifyContent: "flex-end" }}>
