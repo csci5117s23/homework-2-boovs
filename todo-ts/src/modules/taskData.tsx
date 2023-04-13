@@ -74,8 +74,8 @@ export async function postTask(authToken: any, taskText: string) {
 // ------------------------------------------------
 // PUT Functions 
 // ------------------------------------------------
-export async function updateTask(authToken: any, task: any) {
-    const result = await fetch(backend_base+route+"/"+task._id, {
+export async function updateTask(authToken: any, taskId: any, taskText: string) {
+    const result = await fetch(backend_base+route+"/"+taskId, {
         'method':'PUT',
         'headers': {'Authorization': 'Bearer ' + authToken,
         'Content-Type': 'application/json'},

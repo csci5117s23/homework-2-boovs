@@ -24,11 +24,14 @@ import Sidebar from '@/components/Sidebar';
 import TodoListAll from '@/components/AllPage';
 import TaskEditor from '@/components/TaskEditor';
 import { formatDate, formatDate2 } from '../modules/dateFormatter';
+import Child from './Child';
 
 // ------------------
 // Const variables
 // ------------------
 const drawerWidth = 200;
+
+
 
 // --------------------------------
 // Main component export function
@@ -65,7 +68,7 @@ export default function TodosPageLayout() {
             </Card>
 
             {/* Task content controller */}
-            <TaskEditor />
+            <TaskEditor/>
 
         </Box>
     </Box>

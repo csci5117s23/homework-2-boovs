@@ -58,6 +58,9 @@ interface TaskType {
 
 // --------------------------------------------------------------------------
 // --------------------------------------------------------------------------
+interface TaskEditorProps { 
+
+}
 export default function TaskEditor() {
   const { pathname, query } = useRouter();
 
@@ -76,6 +79,17 @@ export default function TaskEditor() {
   async function add() {
     const token = await getToken({ template: JWT_TEMPLATE_NAME });
     const newTask = await postTask(token, addTaskText);
+    setAddTaskText("");
+    setTasks(tasks.concat(newTask));
+  }
+
+
+  // -------------------------------------
+  // Edit a to-do task to the react DOM
+  // -------------------------------------
+  async function edit(taskId: any, taskText: string) {
+    const token = await getToken({ template: JWT_TEMPLATE_NAME });
+    const newTask = await updateTask(token, addTaskText);
     setAddTaskText("");
     setTasks(tasks.concat(newTask));
   }
@@ -209,7 +223,7 @@ export default function TaskEditor() {
                 onClick={ () => add() }
             >
                 <AddRoundedIcon/> Add
-            </Button>   
+            </Button> 
              
           </Box>
         }
@@ -219,7 +233,7 @@ export default function TaskEditor() {
           {tasks.map(task => {
               return (
                   // Todo list entry
-                  <ListItem key={task._id}> 
+                  <ListItem key={task._id} sx={{display: 'flex', flexDirection: 'column', p: 1}}> 
                       <Card variant="outlined" sx={{ minWidth: '100%' }}>
                           {/* Displayed content */}
                           <CardContent>
@@ -261,55 +275,60 @@ export default function TaskEditor() {
                                   <CloseOutlinedIcon/> Delete
                               </Button>
                           </CardActions>
-                      </Card>                                
+                      </Card>
+
+                      { pathname == "/todos/[id]" && 
+                        <Card variant="outlined" sx={{ minWidth: '100%', minHeight: '50vh', mt: 2 }}>
+                          <CardContent>
+                            <Typography variant="h6"> Change Task </Typography>
+                          </CardContent>
+                          <CardActions>
+                            <TextField
+                                id="outlined-multiline-static"
+                                label="Type here..."
+                                multiline
+                                rows={2}
+                                sx={{ width: '100%' }}
+                                value={addTaskText}
+                                onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                                  setAddTaskText(event.target.value);
+                                }}
+                            />
+                          <Button 
+                              sx={{ mt: 1 }}
+                              variant="outlined" 
+                              onClick={ () => edit() }
+                          >
+                              <AddRoundedIcon/> Edit
+                          </Button>  
+                          
+                          </CardActions>
+
+                          <CardContent>
+                            <Typography variant="h6"> Change categories </Typography>
+
+                            <Box
+                              sx={{
+                                display: 'flex',
+                                '& > :not(style)': {
+                                  m: 1,
+                                  width: '50%',
+                                  height: 128,
+                                },
+                              }}
+                            >
+                            <Paper variant="outlined"> </Paper>
+                            <Paper variant="outlined" square />
+                          </Box>
+
+                          </CardContent>
+                          <CardActions>
+                          </CardActions>
+                        </Card>
+                      }
+
                   </ListItem>
-          )})}
-
-
-
-          {/* Editor for current task */}
-          { pathname == "/todos/[id]" && 
-            <ListItem key="editor">
-              <Card variant="outlined" sx={{ minWidth: '100%', minHeight: '50vh' }}>
-                <CardContent>
-                  <Typography variant="h6"> Change Task </Typography>
-                </CardContent>
-                <CardActions>
-                  <TextField
-                      id="outlined-multiline-static"
-                      label="Type here..."
-                      multiline
-                      rows={2}
-                      sx={{ width: '100%' }}
-                    />
-                </CardActions>
-
-                <CardContent>
-                  <Typography variant="h6"> Change categories </Typography>
-
-                  <Box
-                    sx={{
-                      display: 'flex',
-                      '& > :not(style)': {
-                        m: 1,
-                        width: '50%',
-                        height: 128,
-                      },
-                    }}
-                  >
-                  <Paper variant="outlined"> </Paper>
-                  <Paper variant="outlined" square />
-                </Box>
-
-                </CardContent>
-                <CardActions>
-                </CardActions>
-              </Card>
-
-              
-            </ListItem>
-          }
-       
+          )})}       
         </List>
 
         

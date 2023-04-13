@@ -52,4 +52,8 @@ import Parent from "./Parent";
 
 export default function Child(props: any) {
     console.log(props);
-}
+    return (
+      <>Child</>
+    )
+
+  }
