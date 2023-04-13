@@ -110,7 +110,7 @@ export default function Parent() {
 
     // Send PUT request to DB
     const token = await getToken({ template: JWT_TEMPLATE_NAME });
-    const newTask = await updateTask(token, updatedTask);
+    const newTask = await updateTask(token, task._id, updatedTask);
   }
 
 
@@ -130,7 +130,7 @@ export default function Parent() {
 
     // Send PUT request to DB
     const token = await getToken({ template: JWT_TEMPLATE_NAME });
-    const newTask = await updateTask(token, updatedTask);
+    const newTask = await updateTask(token, task._id, updatedTask);
   }
 
   // -------------------------------------

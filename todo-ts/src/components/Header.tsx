@@ -40,7 +40,7 @@ export default function Header( ) {
                 <Toolbar>
 
                     {/* Interactive menu icon */}
-                    <Link href={{ pathname: './todos' }}>
+                    <Link href={{ pathname: '/todos' }}>
                         <IconButton
                             color="inherit"
                             aria-label="open drawer"

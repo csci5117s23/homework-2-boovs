@@ -58,10 +58,7 @@ interface TaskType {
 
 // --------------------------------------------------------------------------
 // --------------------------------------------------------------------------
-interface TaskEditorProps { 
-
-}
-export default function TaskEditor() {
+export default function Parent() {
   const { pathname, query } = useRouter();
 
   
@@ -83,13 +80,12 @@ export default function TaskEditor() {
     setTasks(tasks.concat(newTask));
   }
 
-
   // -------------------------------------
   // Edit a to-do task to the react DOM
   // -------------------------------------
-  async function edit(taskId: any, taskText: string) {
+  async function edit(task: any, taskText: string) {
     const token = await getToken({ template: JWT_TEMPLATE_NAME });
-    const newTask = await updateTask(token, addTaskText);
+    const newTask = await updateTask(token, task, taskText);
     setAddTaskText("");
     setTasks(tasks.concat(newTask));
   }
@@ -124,7 +120,7 @@ export default function TaskEditor() {
 
     // Send PUT request to DB
     const token = await getToken({ template: JWT_TEMPLATE_NAME });
-    const newTask = await updateTask(token, updatedTask);
+    const newTask = await updateTask(token, task._id, updatedTask);
   }
 
 
@@ -144,7 +140,7 @@ export default function TaskEditor() {
 
     // Send PUT request to DB
     const token = await getToken({ template: JWT_TEMPLATE_NAME });
-    const newTask = await updateTask(token, updatedTask);
+    const newTask = await updateTask(token, task._id, updatedTask);
   }
 
   // -------------------------------------
@@ -160,7 +156,6 @@ export default function TaskEditor() {
       }
       // Edit task page
       if ((userId) && (pathname == "/todos/[id]")) {
-        console.log("We got it boys");
         const token = await getToken({ template: JWT_TEMPLATE_NAME});
         setTasks(await getIdTask(token, query.id));
         setLoading(false);
@@ -223,10 +218,11 @@ export default function TaskEditor() {
                 onClick={ () => add() }
             >
                 <AddRoundedIcon/> Add
-            </Button> 
+            </Button>   
              
           </Box>
         }
+
 
         {/* List of items */}
         <List>
@@ -234,7 +230,7 @@ export default function TaskEditor() {
               return (
                   // Todo list entry
                   <ListItem key={task._id} sx={{display: 'flex', flexDirection: 'column', p: 1}}> 
-                      <Card variant="outlined" sx={{ minWidth: '100%' }}>
+                        <Card variant="outlined" sx={{ minWidth: '100%' }}>
                           {/* Displayed content */}
                           <CardContent>
                               {/* Date made */}
@@ -264,25 +260,35 @@ export default function TaskEditor() {
                                       { task.starred ? <><StarIcon/></> : <><StarBorderIcon/></> }
                                   </Button>
                               </Box>
+
                               {/* Edit button */}
-                              <Link href={{ pathname: './todos/[id]', query: { id: task._id } }} as="/todos/[id]">
-                                  <Button size="small">
-                                      <EditTwoToneIcon/> Edit
-                                  </Button>
-                              </Link>
+                              { pathname != "/todos/[id]" && 
+                                <Link href={{ pathname: './todos/[id]', query: { id: task._id } }} as="/todos/[id]">
+                                    <Button size="small">
+                                        <EditTwoToneIcon/> Edit
+                                    </Button>
+                                </Link>
+                              }
+
                               {/* Delete button */}
                               <Button size="small" onClick={ () => del(task._id) }>
                                   <CloseOutlinedIcon/> Delete
                               </Button>
                           </CardActions>
                       </Card>
+                      
 
                       { pathname == "/todos/[id]" && 
                         <Card variant="outlined" sx={{ minWidth: '100%', minHeight: '50vh', mt: 2 }}>
-                          <CardContent>
+                          <CardContent sx={{ display: 'flex', justifyContent: 'space-between'}}>
                             <Typography variant="h6"> Change Task </Typography>
+                            {/* Delete button */}
+                            <Button size="small" onClick={ () => del(task._id) }>
+                                  <CloseOutlinedIcon/> Delete
+                              </Button>
                           </CardContent>
                           <CardActions>
+                            
                             <TextField
                                 id="outlined-multiline-static"
                                 label="Type here..."
@@ -297,7 +303,7 @@ export default function TaskEditor() {
                           <Button 
                               sx={{ mt: 1 }}
                               variant="outlined" 
-                              onClick={ () => edit() }
+                              onClick={ () => edit( task, addTaskText) }
                           >
                               <AddRoundedIcon/> Edit
                           </Button>  
@@ -320,6 +326,9 @@ export default function TaskEditor() {
                             <Paper variant="outlined"> </Paper>
                             <Paper variant="outlined" square />
                           </Box>
+
+                        
+                      
 
                           </CardContent>
                           <CardActions>
