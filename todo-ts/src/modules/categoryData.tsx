@@ -37,20 +37,6 @@ export async function postCategory(authToken: any, categoryText: any) {
 
 
 // ------------------------------------------------
-// PUT Functions 
-// ------------------------------------------------
-export async function updateCategory(authToken: any, category: any) {
-    const result = await fetch(backend_base+route+"/"+category._id, {
-        'method':'PUT',
-        'headers': {'Authorization': 'Bearer ' + authToken,
-        'Content-Type': 'application/json'},
-        'body': JSON.stringify(category)
-    });
-    return await result.json();
-}
-
-
-// ------------------------------------------------
 // DELETE Functions 
 // ------------------------------------------------
 export async function deleteCategory(authToken: any, categoryId: any) {

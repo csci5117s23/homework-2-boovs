@@ -24,7 +24,7 @@ const taskSchemaYup = object( {
 const categorySchemaYup = object( {
   id:         string(),
   value:      string().required(),
-  taskId:     string().required(),
+  // taskId:     string().required(),
   createdOn:  date().default(() => new Date()),
 })
 crudlify(app, {task: taskSchemaYup, category: categorySchemaYup}, options)

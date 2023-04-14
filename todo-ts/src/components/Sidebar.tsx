@@ -37,7 +37,8 @@ import { UserButton } from '@clerk/nextjs';
 
 // Custom component imports
 import FormDialog from './FormDialog';
-import CategoryEditor from '@/components/CategoryEditor';
+import CategoryOptions from '@/components/CategoryOptions';
+import CategoryEditor from './CategoryEditor';
 
 // -------------------------
 // Main export function

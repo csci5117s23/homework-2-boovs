@@ -45,7 +45,6 @@ import {
 } from '../modules/dateFormatter';
 
 // Custom component imports
-import ChipsArray from "./ChipsArray";
 import CategoryEditor from "@/components/CategoryEditor";
 import CategoriesInput from "@/components/CategoriesInput";
 
@@ -60,7 +59,7 @@ interface TaskType {
 
 // --------------------------------------------------------------------------
 // --------------------------------------------------------------------------
-export default function Parent() {
+export default function TaskEditor() {
   const { pathname, query } = useRouter();
   
   const JWT_TEMPLATE_NAME = "codehooks-todo";
@@ -71,6 +70,11 @@ export default function Parent() {
   const [tasks, setTasks] = useState<TaskType[]>([]);
   const [addTaskText, setAddTaskText] = useState<string>("");
   const [editTaskText, setEditTaskText] = useState<string>("");
+
+  const [selectedCategory, setSelectedCategory] = useState<string>("");
+  const updateSelectedCategory = (taskCategory: string):void => {
+    setSelectedCategory(taskCategory)
+  }
 
   // -------------------------------------
   // Add a to-do task to the react DOM
@@ -85,7 +89,7 @@ export default function Parent() {
     const token = await getToken({ template: JWT_TEMPLATE_NAME });
     const newTask = await postTask(token, addTaskText);
     setAddTaskText("");
-    setTasks(tasks.concat(newTask));
+    setTasks([newTask].concat(tasks));
   }
 
   // -------------------------------------
@@ -295,7 +299,6 @@ export default function Parent() {
                   {/* Task editor */}
                   { pathname == "/todos/[id]" && 
                     <Card variant="outlined" sx={{ minWidth: '100%', minHeight: '50vh', mt: 2 }}>
-                      {/* <CategoriesInput/> */}
                       <CardContent sx={{ display: 'flex', justifyContent: 'space-between'}}>
                         <Typography variant="h6"> Change Task </Typography>
                       </CardContent>
@@ -313,8 +316,7 @@ export default function Parent() {
                         />
                       </CardActions>
                       <CardContent>
-                        <Typography variant="h6"> Change categories </Typography>
-
+                        <Typography variant="h6"> Change category </Typography>
                         <Box
                           sx={{
                             display: 'flex',
@@ -325,15 +327,13 @@ export default function Parent() {
                             },
                           }}
                         >
-                        <Paper variant="outlined">
-                          {/* Message for users who have 0 categories */}
-                          
-                            <CategoryEditor/>
-                            <Typography sx={{display: 'flex', justifyContent: 'center'}}>You don&apos;t seem to have any categories.</Typography>  
-                          
+                          {/* Category selection */}
+                          <Paper variant="outlined">  
+                            <CategoriesInput taskCategory={selectedCategory} />
                           </Paper>
-                      </Box>
+                        </Box>
                       </CardContent>
+                  
                         <CardActions sx={{display: "flex", justifyContent: "flex-end" }}>
                         <Button 
                             sx={{ mt: 5 }}

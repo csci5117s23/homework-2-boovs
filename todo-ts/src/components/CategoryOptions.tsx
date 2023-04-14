@@ -77,7 +77,7 @@ export default function CategoryEditor( {page}: any ) {
     const [open, setOpen] = useState<boolean>(false);
     const [addCategoryText, setAddCategoryText] = useState<string>("");
     const [categories, setCategories] = useState<CategoryType[]>([]);
-
+    
     const handleClickOpen = () => {
         setOpen(true);
     };
@@ -180,15 +180,16 @@ export default function CategoryEditor( {page}: any ) {
                 {categories.map(category => {
                     return (
                         <ListItem key={category._id}>
-                          <Chip
-                            sx={{ display: 'flex', justifyContent: "space-between", minWidth: '100%'}}
-                            label={ category.value }
-                            component="a"
-                            href={'/todos/category/' + category._id}
-                            variant="outlined"
-                            clickable
-                            onDelete={ () => del(category._id) }
-                          />                 
+                          <Card sx={{ display: 'flex', justifyContent: 'space-between', minWidth: '20vh', backgroundColor: 'darkgrey', padding: 0}}>
+                            <Link href={{ pathname: '/categories/' + category._id }}>
+                              <CardContent>
+                                <Typography>{category.value}</Typography>
+                              </CardContent>
+                            </Link>
+                              <IconButton aria-label="delete" onClick={ () => del(category._id) }>
+                                <DeleteIcon fontSize="inherit" />
+                              </IconButton>
+                            </Card>
                         </ListItem>
                         )
                     })}

@@ -1,10 +1,10 @@
 // CRUD Functions for user-created to-do list tasks
+import { dateSort } from '@/modules/dateFormatter';
 
 const backend_base = process.env.NEXT_PUBLIC_BACKEND_BASE_URL;
 const API_KEY_R = "2b2e8993-944c-491d-9081-ec3f2412fe50";
 const route: string = "/task";
-
-
+  
 // ------------------------------------------------
 // GET Functions 
 // ------------------------------------------------
@@ -15,7 +15,9 @@ export async function getTasks(authToken: any) {
             'Authorization': 'Bearer ' + authToken,
         }
     })
-    return await result.json();
+    const results = await result.json();
+    const sortedResults = results.sort(dateSort);
+    return sortedResults;
 }
 
 export async function getDoneTasks(authToken: any, done: boolean) {
