@@ -45,7 +45,7 @@ import {
     getCategories, 
     postCategory, 
     updateCategory,
-    deleteCategory
+    deleteCategory,
 } from "../modules/categoryData";
 
 // Custom imports

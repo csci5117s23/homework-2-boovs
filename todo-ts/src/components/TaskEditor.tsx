@@ -36,6 +36,7 @@ import {
   getDoneTasks, 
   getStarredTasks,
   postTask, 
+  toggleTask,
   updateTask, 
   deleteTask 
 } from "../modules/taskData";
@@ -124,7 +125,7 @@ export default function Parent() {
 
     // Send PUT request to DB
     const token = await getToken({ template: JWT_TEMPLATE_NAME });
-    const newTask = await updateTask(token, updatedTask);
+    const newTask = await toggleTask(token, updatedTask);
   }
 
 
@@ -144,7 +145,7 @@ export default function Parent() {
 
     // Send PUT request to DB
     const token = await getToken({ template: JWT_TEMPLATE_NAME });
-    const newTask = await updateTask(token, updatedTask);
+    const newTask = await toggleTask(token, updatedTask);
   }
 
   // -------------------------------------
@@ -203,6 +204,7 @@ export default function Parent() {
 
     return (
       <>
+
         {/* Add task feature only shows on 'todo' page */}
         {(pathname === "/todos") && 
           <Box sx={{ mt: 2 }}>
@@ -228,13 +230,13 @@ export default function Parent() {
         }
 
 
-        {/* List of items */}
+        {/* Content */}
         <List>
           {tasks.map(task => {
               return (
-
-                  // Todo list entry
                   <ListItem key={task._id} sx={{display: 'flex', flexDirection: 'column', p: 1}}> 
+
+                    {/* To do list */}
                     <Card variant="outlined" sx={{ minWidth: '100%' }}>
                       {/* Displayed content */}
                       <CardContent>
@@ -285,9 +287,10 @@ export default function Parent() {
                   </Card>
                   
 
-
+                  {/* Task editor */}
                   { pathname == "/todos/[id]" && 
                     <Card variant="outlined" sx={{ minWidth: '100%', minHeight: '50vh', mt: 2 }}>
+                      <Typography>rats</Typography>
                       {/* <CategoriesInput/> */}
                       <CardContent sx={{ display: 'flex', justifyContent: 'space-between'}}>
                         <Typography variant="h6"> Change Task </Typography>
