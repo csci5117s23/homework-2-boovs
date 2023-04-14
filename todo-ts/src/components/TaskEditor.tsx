@@ -14,6 +14,12 @@ import TextField from '@mui/material/TextField';
 import Checkbox from '@mui/material/Checkbox';
 import CircularProgress from '@mui/material/CircularProgress';
 import Paper from "@mui/material/Paper";
+import Radio from '@mui/material/Radio';
+import RadioGroup from '@mui/material/RadioGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import FormControl from '@mui/material/FormControl';
+import FormLabel from '@mui/material/FormLabel';
+import { Container } from "@mui/material";
 
 // MUI Icon Imports
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
@@ -40,6 +46,11 @@ import {
   deleteTask 
 } from "../modules/taskData";
 import { 
+  getCategories, 
+  postCategory, 
+  deleteCategory,
+} from "../modules/categoryData";
+import { 
   formatDate, 
   formatDate2 
 } from '../modules/dateFormatter';
@@ -51,15 +62,23 @@ import CategoriesInput from "@/components/CategoriesInput";
 // Type for to-do tasks
 interface TaskType {
   _id: string; 
+  categoryName: string;
   value: string; 
   done: boolean; 
   starred: boolean;
   createdOn: Date;
 }
 
+interface CategoryType {
+  _id: string; 
+  value: string; 
+  createdOn: Date;
+}
+
 // --------------------------------------------------------------------------
 // --------------------------------------------------------------------------
 export default function TaskEditor() {
+  // React state hooks
   const { pathname, query } = useRouter();
   
   const JWT_TEMPLATE_NAME = "codehooks-todo";
@@ -71,10 +90,13 @@ export default function TaskEditor() {
   const [addTaskText, setAddTaskText] = useState<string>("");
   const [editTaskText, setEditTaskText] = useState<string>("");
 
-  const [selectedCategory, setSelectedCategory] = useState<string>("");
-  const updateSelectedCategory = (taskCategory: string):void => {
-    setSelectedCategory(taskCategory)
-  }
+  const [categories, setCategories] = useState<CategoryType[]>([]);
+
+
+  const [selectedCategoryName, setSelectedCategoryName] = useState('');
+  const handleSelectionChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSelectedCategoryName((event.target as HTMLInputElement).value);
+  };
 
   // -------------------------------------
   // Add a to-do task to the react DOM
@@ -97,7 +119,7 @@ export default function TaskEditor() {
   // -------------------------------------
   async function edit(task: any) {
     // Set new task to have user-inputted text
-    const updatedTask = {...task, value: editTaskText }
+    const updatedTask = {...task, categoryName: selectedCategoryName, value: editTaskText }
     const token = await getToken({ template: JWT_TEMPLATE_NAME });
     const newTask = await updateTask(token, updatedTask);
     setEditTaskText("");
@@ -194,6 +216,16 @@ export default function TaskEditor() {
       }
     }
     process();
+
+    async function processCategories() {
+      // Get user categories
+      if (userId) {
+        const token = await getToken({ template: JWT_TEMPLATE_NAME});
+        setCategories(await getCategories(token));
+        setLoading(false);
+      }
+    }
+    processCategories();
   }, [isLoaded]);
 
 
@@ -245,14 +277,22 @@ export default function TaskEditor() {
               return (
                   <ListItem key={task._id} sx={{display: 'flex', flexDirection: 'column', p: 1}}> 
 
+                    {/* -------------------------------------------------------------------------------- */}
                     {/* To do list */}
                     <Card variant="outlined" sx={{ minWidth: '100%' }}>
                       {/* Displayed content */}
                       <CardContent>
-                          {/* Date made */}
-                          <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-                              {formatDate2(new Date(task.createdOn))}
-                          </Typography>
+                          <Box sx={{display: 'flex', justifyContent: 'space-between'}}>
+                            {/* Date text */}
+                            <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+                                {formatDate2(new Date(task.createdOn))}
+                            </Typography>
+                            {/* Category text */}
+                            <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+                                Category: { (task.categoryName) ? task.categoryName : "None"}
+                            </Typography>
+
+                          </Box>
                           {/* Task title */}
                           <Typography  sx={{ mb: -2 }} variant="h6" component="div">
                               {task.value}
@@ -295,7 +335,7 @@ export default function TaskEditor() {
                       </CardActions>
                   </Card>
                   
-
+                  {/* -------------------------------------------------------------------------------- */}
                   {/* Task editor */}
                   { pathname == "/todos/[id]" && 
                     <Card variant="outlined" sx={{ minWidth: '100%', minHeight: '50vh', mt: 2 }}>
@@ -329,7 +369,33 @@ export default function TaskEditor() {
                         >
                           {/* Category selection */}
                           <Paper variant="outlined">  
-                            <CategoriesInput taskCategory={selectedCategory} />
+                            {/* <CategoriesInput taskCategory={selectedCategory}  updateSelectedCategory={updateSelectedCategory}/> */}
+                            <Container className="tags-input-container">
+
+                                  <FormControl>
+                                    <FormLabel id="demo-controlled-radio-buttons-group">Your categories:</FormLabel>
+                                    <RadioGroup
+                                      aria-labelledby="demo-controlled-radio-buttons-group"
+                                      name="controlled-radio-buttons-group"
+                                      value={selectedCategoryName}
+                                      onChange={handleSelectionChange}
+                                    >
+                                      
+                                        {/* Show all categories/tags */}
+                                        { categories.map( category => (
+                                          <FormControlLabel 
+                                              key={category._id} 
+                                              value={category.value} 
+                                              label={category.value} 
+                                              control={<Radio required={false} />}
+                                          />
+                                        ))}
+                                    </RadioGroup>
+                                  </FormControl>
+
+                          </Container>
+
+
                           </Paper>
                         </Box>
                       </CardContent>

@@ -1,6 +1,6 @@
 // src/components/TagsInput.js
 import { useState, useEffect } from 'react'
-import { Chip, Container, Typography } from '@mui/material'
+import { Card, Chip, Container, Typography } from '@mui/material'
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
@@ -25,22 +25,21 @@ interface CategoryType {
 
 interface CategoriesInputProps {
     taskCategory: string;
+    updateSelectedCategory: (arg: string) => void;
 }
-export default function CategoriesInput( {taskCategory} : CategoriesInputProps ) {
+export default function CategoriesInput( {taskCategory, updateSelectedCategory} : CategoriesInputProps ) {
+    // console.log({taskCategory})
+
     const JWT_TEMPLATE_NAME = "codehooks-todo";
     const { isLoaded, userId, sessionId, getToken } = useAuth();
     const [loading, setLoading] = useState<boolean>(true);
-    const [open, setOpen] = useState<boolean>(false);
-    const [addCategoryText, setAddCategoryText] = useState<string>("");
     const [categories, setCategories] = useState<CategoryType[]>([]);
 
-    const [selectedTags, setSelectedTags] = useState<any>([])
-    const [unselectedTags, setUnselectedTags] = useState<any>([])
-
-    const [value, setValue] = useState('female');
+    const [value, setValue] = useState("");
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setValue((event.target as HTMLInputElement).value);
+        updateSelectedCategory(value);
     };
 
     // --------------------------------------------------------
@@ -48,54 +47,46 @@ export default function CategoriesInput( {taskCategory} : CategoriesInputProps )
     // --------------------------------------------------------
     useEffect(() => {
         async function process() {
-        // Todo page
-        if ((userId)) {
-            const token = await getToken({ template: JWT_TEMPLATE_NAME});
-            setCategories(await getCategories(token));
-            setLoading(false);
-        }
+            // Load in categories page
+            if ((userId)) {
+                const token = await getToken({ template: JWT_TEMPLATE_NAME});
+                setCategories(await getCategories(token));
+                setLoading(false);
+                console.log(categories);
+            }
         }
         process();
     }, [isLoaded]);
-    
 
-    // Select tag
-    function selectTag(e: any) 
-    {
-        console.log("Select");
-        setSelectedTags([...selectedTags])
-        // e.target.value = ''
+    if (loading) {
+        console.log("Loading...");
     }
-
-    // Deselect tags
-    function deselectTag(category: any) 
-    {
-        console.log(category)
-        console.log("Deselect");
-        // setCategories(categories.filter((category: any) => category._id !== categoryId))
+    else {
+        // console.log("Done loading");
+        // Selected tags
+        return (
+            <Container className="tags-input-container">
+                <FormControl>
+                    <FormLabel id="demo-controlled-radio-buttons-group">Your categories:</FormLabel>
+                    <RadioGroup
+                        aria-labelledby="demo-controlled-radio-buttons-group"
+                        name="controlled-radio-buttons-group"
+                        value={value}
+                        onChange={handleChange}
+                        
+                    >
+                        {/* Show all categories/tags */}
+                        { categories.map( category => (
+                            <FormControlLabel 
+                                key={category._id} 
+                                value={category._id} 
+                                label={category.value} 
+                                control={<Radio required={true} />}
+                            />
+                        ))}
+                </RadioGroup>
+            </FormControl>
+            </Container>
+        )
     }
-
-    
-    // Selected tags
-    return (
-        <Container className="tags-input-container">
-            <FormControl>
-                <FormLabel id="demo-controlled-radio-buttons-group">Your categories:</FormLabel>
-                <RadioGroup
-                    aria-labelledby="demo-controlled-radio-buttons-group"
-                    name="controlled-radio-buttons-group"
-                    value={value}
-                    onChange={handleChange}
-                >
-                    {/* Show all categories/tags */}
-                    { categories.map( category => (
-                    <>
-                        <FormControlLabel value={category._id} control={<Radio />} label={category.value} />
-                    </>
-                    ))
-                    }
-            </RadioGroup>
-        </FormControl>
-        </Container>
-    )
 }

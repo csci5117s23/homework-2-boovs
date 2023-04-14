@@ -13,18 +13,18 @@ const options = {  // Schema options
 //////////////////////////////////////////////////////////////////////
 // Database schema - To-do tasks
 const taskSchemaYup = object( {
-  id:         string(),
-  value:      string().required(),
-  done:       bool().required(),
-  starred:    bool().required(),
-  createdOn:  date().default(() => new Date()),
+  id:           string(),
+  categoryName: string(),
+  value:        string().required(),
+  done:         bool().required(),
+  starred:      bool().required(),
+  createdOn:    date().default(() => new Date()),
 })
 //////////////////////////////////////////////////////////////////////
 // Database schema - To-do tasks
 const categorySchemaYup = object( {
   id:         string(),
   value:      string().required(),
-  // taskId:     string().required(),
   createdOn:  date().default(() => new Date()),
 })
 crudlify(app, {task: taskSchemaYup, category: categorySchemaYup}, options)
