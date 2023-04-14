@@ -36,8 +36,7 @@ import {
   getDoneTasks, 
   getStarredTasks,
   postTask, 
-  toggleTask,
-  updateTask, 
+  updateTask,
   deleteTask 
 } from "../modules/taskData";
 import { 
@@ -77,6 +76,12 @@ export default function Parent() {
   // Add a to-do task to the react DOM
   // -------------------------------------
   async function add() {
+    // Ensure empty inputs are not added (invalid)
+    if (!addTaskText)
+    {
+        alert("Enter a task.");
+        return;
+    }
     const token = await getToken({ template: JWT_TEMPLATE_NAME });
     const newTask = await postTask(token, addTaskText);
     setAddTaskText("");
@@ -125,7 +130,7 @@ export default function Parent() {
 
     // Send PUT request to DB
     const token = await getToken({ template: JWT_TEMPLATE_NAME });
-    const newTask = await toggleTask(token, updatedTask);
+    const newTask = await updateTask(token, updatedTask);
   }
 
 
@@ -145,7 +150,7 @@ export default function Parent() {
 
     // Send PUT request to DB
     const token = await getToken({ template: JWT_TEMPLATE_NAME });
-    const newTask = await toggleTask(token, updatedTask);
+    const newTask = await updateTask(token, updatedTask);
   }
 
   // -------------------------------------
@@ -290,7 +295,6 @@ export default function Parent() {
                   {/* Task editor */}
                   { pathname == "/todos/[id]" && 
                     <Card variant="outlined" sx={{ minWidth: '100%', minHeight: '50vh', mt: 2 }}>
-                      <Typography>rats</Typography>
                       {/* <CategoriesInput/> */}
                       <CardContent sx={{ display: 'flex', justifyContent: 'space-between'}}>
                         <Typography variant="h6"> Change Task </Typography>

@@ -74,34 +74,34 @@ export async function postTask(authToken: any, taskText: string) {
 // ------------------------------------------------
 // PUT Functions 
 // ------------------------------------------------
-export async function toggleTask(authToken: any, task: any) {
+export async function updateTask(authToken: any, task: any) {
     const result = await fetch(backend_base+route+"/"+task._id, {
         'method':'PUT',
         'headers': {'Authorization': 'Bearer ' + authToken,
         'Content-Type': 'application/json'},
         'body': JSON.stringify(task)
     });
-    return await result.json();
+    return await result.json(); 
 }
 
 
-// ------------------------------------------------
-// PUT Functions 
-// ------------------------------------------------
-export async function updateTask(authToken: any, task: any) {
-    const result = await fetch(backend_base+route+"/"+task._id, {
-        'method':'PUT',
-        'headers': {'Authorization': 'Bearer ' + authToken,
-        'Content-Type': 'application/json'},
-        'body': JSON.stringify({
-            value:      task.value,
-            done:       task.done,
-            starred:    task.starred,
-            createdOn:  new Date()
-        })
-    });
-    return await result.json();
-}
+// // ------------------------------------------------
+// // PUT Functions 
+// // ------------------------------------------------
+// export async function updateTask(authToken: any, task: any) {
+//     const result = await fetch(backend_base+route+"/"+task._id, {
+//         'method':'PUT',
+//         'headers': {'Authorization': 'Bearer ' + authToken,
+//         'Content-Type': 'application/json'},
+//         'body': JSON.stringify({
+//             value:      task.value,
+//             done:       task.done,
+//             starred:    task.starred,
+//             createdOn:  new Date()
+//         })
+//     });
+//     return await result.json();
+// }
 
 
 // ------------------------------------------------

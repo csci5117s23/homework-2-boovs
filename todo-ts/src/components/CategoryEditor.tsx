@@ -90,6 +90,12 @@ export default function CategoryEditor( {page}: any ) {
   // Add a category to the react DOM
   // -------------------------------------
   async function add() {
+    // Ensure empty inputs are not added (invalid)
+    if (!addCategoryText)
+    {
+        alert("Enter a task.");
+        return;
+    }
     const token = await getToken({ template: JWT_TEMPLATE_NAME });
     const newCategory = await postCategory(token, addCategoryText);
     setAddCategoryText("");
