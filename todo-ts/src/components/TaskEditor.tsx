@@ -46,7 +46,8 @@ import {
 
 // Custom component imports
 import ChipsArray from "./ChipsArray";
-import CategoryEditor from "./CategoryEditor";
+import CategoryEditor from "@/components/CategoryEditor";
+import CategoriesInput from "@/components/CategoriesInput";
 
 // Type for to-do tasks
 interface TaskType {
@@ -287,6 +288,7 @@ export default function Parent() {
 
                   { pathname == "/todos/[id]" && 
                     <Card variant="outlined" sx={{ minWidth: '100%', minHeight: '50vh', mt: 2 }}>
+                      {/* <CategoriesInput/> */}
                       <CardContent sx={{ display: 'flex', justifyContent: 'space-between'}}>
                         <Typography variant="h6"> Change Task </Typography>
                       </CardContent>
