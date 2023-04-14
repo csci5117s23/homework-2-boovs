@@ -43,7 +43,7 @@ export async function getStarredTasks(authToken: any) {
 }
 
 export async function getIdTask(authToken: any, taskId: any) {
-    const result = await fetch(backend_base+route,{
+    const result = await fetch(backend_base+route+"/",{
         'method':'GET',
         'headers': {
             'Authorization': 'Bearer ' + authToken,
@@ -51,6 +51,20 @@ export async function getIdTask(authToken: any, taskId: any) {
     })
     const tasks = await result.json();
     return tasks.filter((task: any) => (task._id === taskId))
+}
+
+
+
+// Gets a category from the given ID
+export async function getTasksForCategoryId(authToken: any, categoryId: any) {
+    const result = await fetch(backend_base+route,{
+        'method':'GET',
+        'headers': {
+            'Authorization': 'Bearer ' + authToken,
+        }
+    })
+    const tasks = await result.json();
+    return tasks.filter((task: any) => (task.categoryId === categoryId))
 }
 
 // ------------------------------------------------

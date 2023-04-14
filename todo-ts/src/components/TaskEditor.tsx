@@ -43,10 +43,12 @@ import {
   getStarredTasks,
   postTask, 
   updateTask,
-  deleteTask 
+  deleteTask ,
+  getTasksForCategoryId,
 } from "../modules/taskData";
 import { 
-  getCategories, 
+  getCategories,
+  getCategoryId,
   postCategory, 
   deleteCategory,
 } from "../modules/categoryData";
@@ -62,6 +64,7 @@ import CategoriesInput from "@/components/CategoriesInput";
 // Type for to-do tasks
 interface TaskType {
   _id: string; 
+  categoryId: string;
   categoryName: string;
   value: string; 
   done: boolean; 
@@ -92,11 +95,20 @@ export default function TaskEditor() {
 
   const [categories, setCategories] = useState<CategoryType[]>([]);
 
-
-  const [selectedCategoryName, setSelectedCategoryName] = useState('');
+  const [selectedCategoryId, setSelectedCategoryId] = useState("");
+  const [selectedCategoryName, setSelectedCategoryName] = useState("");
   const handleSelectionChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSelectedCategoryName((event.target as HTMLInputElement).value);
+    setSelectedCategoryId((event.target as HTMLInputElement).value);
   };
+
+  // -------------------------------------
+  // Get task category name
+  // -------------------------------------
+  async function getTaskCategory(taskCategoryId: any) {
+    const token = await getToken({ template: JWT_TEMPLATE_NAME});
+    const category = await getCategoryId(token, taskCategoryId);
+    return category[0];
+  }
 
   // -------------------------------------
   // Add a to-do task to the react DOM
@@ -119,7 +131,7 @@ export default function TaskEditor() {
   // -------------------------------------
   async function edit(task: any) {
     // Set new task to have user-inputted text
-    const updatedTask = {...task, categoryName: selectedCategoryName, value: editTaskText }
+    const updatedTask = {...task, categoryId: selectedCategoryId, value: editTaskText }
     const token = await getToken({ template: JWT_TEMPLATE_NAME });
     const newTask = await updateTask(token, updatedTask);
     setEditTaskText("");
@@ -194,6 +206,13 @@ export default function TaskEditor() {
       if ((userId) && (pathname == "/todos/[id]")) {
         const token = await getToken({ template: JWT_TEMPLATE_NAME});
         setTasks(await getIdTask(token, query.id));
+        setLoading(false);
+      }
+      // Todos category ID page
+      if ((userId) && (pathname == "/todos/category/[id]")) {
+        console.log(query.id);
+        const token = await getToken({ template: JWT_TEMPLATE_NAME});
+        setTasks(await getTasksForCategoryId(token, query.id));
         setLoading(false);
       }
       // Done page
@@ -289,7 +308,7 @@ export default function TaskEditor() {
                             </Typography>
                             {/* Category text */}
                             <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-                                Category: { (task.categoryName) ? task.categoryName : "None"}
+                                Category: {task.categoryId}
                             </Typography>
 
                           </Box>
@@ -340,12 +359,12 @@ export default function TaskEditor() {
                   { pathname == "/todos/[id]" && 
                     <Card variant="outlined" sx={{ minWidth: '100%', minHeight: '50vh', mt: 2 }}>
                       <CardContent sx={{ display: 'flex', justifyContent: 'space-between'}}>
-                        <Typography variant="h6"> Change Task </Typography>
+                        <Typography variant="h6"> Enter a new task description </Typography>
                       </CardContent>
                       <CardActions>
                         <TextField
                             id="outlined-multiline-static"
-                            label="Type here..."
+                            label={task.value}
                             multiline
                             rows={2}
                             sx={{ width: '100%' }}
@@ -356,7 +375,7 @@ export default function TaskEditor() {
                         />
                       </CardActions>
                       <CardContent>
-                        <Typography variant="h6"> Change category </Typography>
+                        <Typography variant="h6"> Edit task category </Typography>
                         <Box
                           sx={{
                             display: 'flex',
@@ -377,15 +396,17 @@ export default function TaskEditor() {
                                     <RadioGroup
                                       aria-labelledby="demo-controlled-radio-buttons-group"
                                       name="controlled-radio-buttons-group"
-                                      value={selectedCategoryName}
-                                      onChange={handleSelectionChange}
+                                      value={selectedCategoryId}
+                                      id="help"
+                                      onChange={ (event) => handleSelectionChange(event) }
                                     >
                                       
                                         {/* Show all categories/tags */}
                                         { categories.map( category => (
                                           <FormControlLabel 
                                               key={category._id} 
-                                              value={category.value} 
+                                              id={category._id}
+                                              value={category._id} 
                                               label={category.value} 
                                               control={<Radio required={false} />}
                                           />

@@ -17,6 +17,17 @@ export async function getCategories(authToken: any) {
     return await result.json();
 }
 
+// Gets a category from the given ID
+export async function getCategoryId(authToken: any, categoryId: any) {
+    const result = await fetch(backend_base+route,{
+        'method':'GET',
+        'headers': {
+            'Authorization': 'Bearer ' + authToken,
+        }
+    })
+    const categories = await result.json();
+    return categories.filter((category: any) => (category._id === categoryId))
+}
 
 // ------------------------------------------------
 // POST Functions

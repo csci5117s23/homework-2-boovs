@@ -14,6 +14,7 @@ const options = {  // Schema options
 // Database schema - To-do tasks
 const taskSchemaYup = object( {
   id:           string(),
+  categoryId:   string(),
   categoryName: string(),
   value:        string().required(),
   done:         bool().required(),
