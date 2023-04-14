@@ -91,13 +91,41 @@ export async function postTask(authToken: any, taskText: string) {
 // PUT Functions 
 // ------------------------------------------------
 export async function updateTask(authToken: any, task: any) {
+    // Get category name
+    const categoryQuery = await fetch(backend_base+"/category/"+task.categoryId, {
+        'method':'GET',
+        'headers': {
+            'Authorization': 'Bearer ' + authToken,
+        }
+    })
+    const category = await categoryQuery.json();
+    const categoryName = category.name;
+
+    // const result = await fetch(backend_base+route+"/"+task._id, {
+    //     'method':'PUT',
+    //     'headers': {'Authorization': 'Bearer ' + authToken,
+    //     'Content-Type': 'application/json'},
+    //     'body': JSON.stringify(task)
+    // });
+    // return await result.json(); 
+
     const result = await fetch(backend_base+route+"/"+task._id, {
         'method':'PUT',
         'headers': {'Authorization': 'Bearer ' + authToken,
         'Content-Type': 'application/json'},
-        'body': JSON.stringify(task)
+        'body': JSON.stringify({
+            id:             task.id,
+            categoryId:     task.categoryId,
+            categoryName:   categoryName,
+            value:          task.value,
+            done:           task.done,
+            starred:        task.starred,
+            createdOn: task.createdOn,
+            
+        })
     });
     return await result.json(); 
+
 }
 
 
