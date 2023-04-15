@@ -1,7 +1,11 @@
 // Code hooks imports
+// @ts-ignore
 import {app, Datastore} from 'codehooks-js';
+// @ts-ignore
 import crudlify from 'codehooks-crudlify';
+// @ts-ignore
 import { object, string, number, date, InferType, bool } from 'yup';
+// @ts-ignore
 import jwtDecode from 'jwt-decode';
 
 //////////////////////////////////////////////////////////////////////
@@ -38,7 +42,7 @@ crudlify(app, {task: taskSchemaYup, category: categorySchemaYup}, options)
 //////////////////////////////////////////////////////////////////////
 // Authorization
 // Grabs the authorization token and parses it, stashing it on the request.
-const userAuth = async (req, res, next) => {
+const userAuth = async (req: any, res: any, next: any) => {
   try {
     const { authorization } = req.headers;
     if (authorization) {
@@ -57,7 +61,7 @@ app.use(userAuth)
 //////////////////////////////////////////////////////////////////////
 // 'task' route authentication
 // Extra logic for GET / and POST / requests.
-app.use('/task', (req, res, next) => {
+app.use('/task', (req: any, res: any, next: any) => {
   if (req.method === "POST") {
       // always save authenticating user Id token.
       // note -- were not enforcing uniqueness which isn't great.
@@ -73,7 +77,7 @@ app.use('/task', (req, res, next) => {
 })
 // Extra logic for GET /id and PUT /id DELETE /id PATCH /id requests.
 // side effect here will break patch patch by query, but that's OK for my purposes.
-app.use('/task/:id', async (req, res, next) => {
+app.use('/task/:id', async (req: any, res: any, next: any) => {
   const id = req.params.ID;
   const userId = req.user_token.sub
   // let's check access rights for the document being read/updated/replaced/deleted
@@ -99,7 +103,7 @@ app.use('/task/:id', async (req, res, next) => {
 //////////////////////////////////////////////////////////////////////
 // 'category' route authentication
 // Extra logic for GET / and POST / requests.
-app.use('/category', (req, res, next) => {
+app.use('/category', (req: any, res: any, next: any) => {
   if (req.method === "POST") {
       // always save authenticating user Id token.
       // note -- were not enforcing uniqueness which isn't great.
@@ -115,7 +119,7 @@ app.use('/category', (req, res, next) => {
 })
 // Extra logic for GET /id and PUT /id DELETE /id PATCH /id requests.
 // side effect here will break patch patch by query, but that's OK for my purposes.
-app.use('/category/:id', async (req, res, next) => {
+app.use('/category/:id', async (req: any, res: any, next: any) => {
   const id = req.params.ID;
   const userId = req.user_token.sub
   // let's check access rights for the document being read/updated/replaced/deleted
