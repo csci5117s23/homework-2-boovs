@@ -8,6 +8,7 @@ Please fill out all of the following sections to help us grade your submission:
 ## Student (to be completed individually)
 
 * First Last, x500@umn.edu
+* Joshua Yang, yang7182@umn.edu
 
 ## Link to Site
 
@@ -15,6 +16,7 @@ Please fill out all of the following sections to help us grade your submission:
 
 ## Challenge Task
 
-* I started the challenge task: [yes/no]
-* I completed the challenge task: [yes/no]
+* I started the challenge task: [yes/no] YES
+* I completed the challenge task: [yes/no] YES
+
 
