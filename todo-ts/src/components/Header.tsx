@@ -64,7 +64,7 @@ export default function Header( ) {
                     {/* Use account button  */}
                     <Box sx={{ flexGrow: 1 }} />
                     <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-                        <UserButton/>
+                        <UserButton afterSignOutUrl="/"/>
                     </Box>
 
                 </Toolbar>

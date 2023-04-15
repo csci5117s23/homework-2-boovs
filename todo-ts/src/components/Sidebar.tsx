@@ -103,7 +103,7 @@ export default function Sidebar( {drawerWidth}: SideBarProps ) {
                 <ListItem key={"Account"} disablePadding>
                     <ListItemButton>
                         <ListItemIcon>
-                            <UserButton/>
+                            <UserButton afterSignOutUrl="/"/>
                         </ListItemIcon>
                         <ListItemText primary="Account" />
                     </ListItemButton>
@@ -112,13 +112,13 @@ export default function Sidebar( {drawerWidth}: SideBarProps ) {
                 <Divider /> 
 
                 {/* Task categories */}
-                <Link href={{ pathname: '/todos' }}>
-                    <ListItem key={"Tasks"} disablePadding>
+                <Link href={{ pathname: '/all' }}>
+                    <ListItem key={"All Tasks"} disablePadding>
                         <ListItemButton>
                             <ListItemIcon>
                                 <ChecklistRtlTwoToneIcon/>
                             </ListItemIcon>
-                            <ListItemText primary="Tasks" />
+                            <ListItemText primary="All Tasks" />
                         </ListItemButton>
                     </ListItem>
                 </Link>
@@ -148,7 +148,7 @@ export default function Sidebar( {drawerWidth}: SideBarProps ) {
                 </Link>
 
                 {/* 'Unfinished' category */}
-                <Link href={{ pathname: '/unfinished' }}>
+                <Link href={{ pathname: '/todos' }}>
                     <ListItem key={"Unfinished"} disablePadding>
                         <ListItemButton>
                             <ListItemIcon>

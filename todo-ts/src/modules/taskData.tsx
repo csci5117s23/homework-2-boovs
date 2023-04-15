@@ -30,7 +30,22 @@ export async function getDoneTasks(authToken: any, done: boolean) {
         }
     })
     const tasks = await result.json();
-    return tasks.filter((task: any) => (task.done === done))
+    const filteredTasks = tasks.filter((task: any) => (task.done === done))
+    const sortedResults = filteredTasks.sort(dateSort);
+    return sortedResults;
+}
+
+export async function getDoneCategoryTasks(authToken: any, done: boolean, categoryId: any) {
+    const result = await fetch(backend_base+route,{
+        'method':'GET',
+        'headers': {
+            'Authorization': 'Bearer ' + authToken,
+        }
+    })
+    const tasks = await result.json();
+    const filteredTasks = tasks.filter((task: any) => (task.done === done && task.categoryId === categoryId))
+    const sortedResults = filteredTasks.sort(dateSort);
+    return sortedResults;
 }
 
 export async function getStarredTasks(authToken: any) {
@@ -41,7 +56,9 @@ export async function getStarredTasks(authToken: any) {
         }
     })
     const tasks = await result.json();
-    return tasks.filter((task: any) => (task.starred === true))
+    const filteredTasks = tasks.filter((task: any) => (task.starred === true))
+    const sortedResults = filteredTasks.sort(dateSort);
+    return sortedResults;
 }
 
 export async function getIdTask(authToken: any, taskId: any) {
@@ -88,6 +105,27 @@ export async function postTask(authToken: any, taskText: string) {
     return await result.json();
 }
 
+export async function postTaskCategory(authToken: any, taskText: string, categoryId: any) {
+    // Get category name
+    const categoryQuery = await getCategoryIdData(authToken, categoryId);
+    const categoryName = categoryQuery.value;
+
+    const result = await fetch(backend_base+route,{
+        'method':'POST',
+        'headers': {
+            'Authorization': 'Bearer ' + authToken,
+            'Content-Type': 'application/json'
+        },
+        'body': JSON.stringify({
+            value:          taskText,
+            done:           false,
+            starred:        false,
+            categoryId:     categoryId,
+            categoryName:   categoryName
+        })
+    })
+    return await result.json();
+}
 
 // ------------------------------------------------
 // PUT Functions 
@@ -106,25 +144,6 @@ export async function updateTask(authToken: any, task: any) {
     return await result.json();
 
 }
-
-
-// // ------------------------------------------------
-// // PUT Functions 
-// // ------------------------------------------------
-// export async function updateTask(authToken: any, task: any) {
-//     const result = await fetch(backend_base+route+"/"+task._id, {
-//         'method':'PUT',
-//         'headers': {'Authorization': 'Bearer ' + authToken,
-//         'Content-Type': 'application/json'},
-//         'body': JSON.stringify({
-//             value:      task.value,
-//             done:       task.done,
-//             starred:    task.starred,
-//             createdOn:  new Date()
-//         })
-//     });
-//     return await result.json();
-// }
 
 
 // ------------------------------------------------

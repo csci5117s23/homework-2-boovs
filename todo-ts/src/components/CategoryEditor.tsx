@@ -23,16 +23,14 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import Tooltip from '@mui/material/Tooltip'
 import Chip from '@mui/material/Chip'
+import Container from "@mui/material/Container";
+import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
+import ToggleButton from "@mui/material/ToggleButton";
+import Divider from "@mui/material/Divider";
+import { IconButton } from "@mui/material";
+import DeleteIcon from '@mui/icons-material/Delete';
 
 // MUI Icons
-import ListItemIcon from '@mui/material/ListItemIcon';
-import CancelIcon from '@mui/icons-material/Cancel';
-import ChecklistRtlTwoToneIcon from '@mui/icons-material/ChecklistRtlTwoTone';
-import CheckCircleTwoToneIcon from '@mui/icons-material/CheckCircleTwoTone';
-import StarIcon from '@mui/icons-material/Star';
-import CategoryIcon from '@mui/icons-material/Category';
-import IconButton from '@mui/material/IconButton';
-import DeleteIcon from '@mui/icons-material/Delete';
 import AddBoxIcon from '@mui/icons-material/AddBox';
 
 
@@ -74,10 +72,21 @@ export default function CategoryEditor( {page}: any ) {
     const JWT_TEMPLATE_NAME = "codehooks-todo";
     const { isLoaded, userId, sessionId, getToken } = useAuth();
     const [loading, setLoading] = useState<boolean>(true);
-    const [open, setOpen] = useState<boolean>(false);
+        
     const [addCategoryText, setAddCategoryText] = useState<string>("");
     const [categories, setCategories] = useState<CategoryType[]>([]);
 
+    const [alignment, setAlignment] = React.useState('todos');
+
+    const handleChange = (
+      event: React.MouseEvent<HTMLElement>,
+      newAlignment: string,
+    ) => {
+      setAlignment(newAlignment);
+      console.log(alignment)
+    };
+
+    const [open, setOpen] = useState<boolean>(false);
     const handleClickOpen = () => {
         setOpen(true);
     };
@@ -175,20 +184,44 @@ export default function CategoryEditor( {page}: any ) {
                     </DialogActions>
                 </Dialog>
             </Box>
+            
+
+            <Container sx={{mt: 1}}>
+              <Card sx={{display: 'flex', justifyContent: 'center', mb: 1}}>
+                <Typography>
+                  Category filter:
+                </Typography>
+              </Card>
+              <ToggleButtonGroup
+                color="primary"
+                value={alignment}
+                exclusive
+                onChange={handleChange}
+                aria-label="Platform"
+              >
+                <ToggleButton sx={{width: '50%'}} value="todos">Todo</ToggleButton>
+                <ToggleButton sx={{width: '50%'}} value="done">Done</ToggleButton>
+            </ToggleButtonGroup>
+          </Container>
+
             {/* List of items */}
             <List>
                 {categories.map(category => {
                     return (
                         <ListItem key={category._id}>
+            
                           <Chip
-                            sx={{ display: 'flex', justifyContent: "space-between", minWidth: '100%'}}
+                            sx={{ display: 'flex', justifyContent: "space-between", minWidth: '75%'}}
                             label={ category.value }
                             component="a"
-                            href={'/todos/category/' + category._id}
+                            href={ alignment ? ('/' + alignment + '/category/' + category._id) : ('/' + 'todos' + '/category/' + category._id)}
                             variant="outlined"
                             clickable
-                            onDelete={ () => del(category._id) }
-                          />                 
+                            color="primary"
+                          />       
+                          <IconButton aria-label="delete" onClick={ () => del(category._id) }>
+                            <DeleteIcon />
+                          </IconButton>
                         </ListItem>
                         )
                     })}

@@ -5,7 +5,7 @@ import TodosPageLayout from '@/components/Layout';
 // --------------------------------
 // Main component export function
 // --------------------------------
-export default function UnfinishedPage() {
+export default function DoneTaskCategoriesPage() {
   return (
     <TodosPageLayout/>
   );

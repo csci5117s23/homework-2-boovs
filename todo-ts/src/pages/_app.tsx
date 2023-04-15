@@ -5,6 +5,7 @@ import type { AppProps } from 'next/app'
 import Link from 'next/link';
 import Card from '@mui/material/Card';
 import Container from '@mui/material/Card';
+import { useRouter } from 'next/router'
 
 
 // Component Imports
@@ -31,7 +32,7 @@ const NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY= "pk_test_ZmxleGlibGUtbWFuYXRlZS0xLmNsZX
 // Default "App" export function
 ////////////////////////////////////////////////////
 function MyApp({ Component, pageProps }: AppProps) {
-
+    
   /////////////////////////////////////////////////////////////////////
   // RETURN JSX
   /////////////////////////////////////////////////////////////////////

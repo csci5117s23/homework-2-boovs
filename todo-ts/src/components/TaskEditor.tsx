@@ -45,6 +45,9 @@ import {
   updateTask,
   deleteTask ,
   getTasksForCategoryId,
+  getDoneCategoryTasks,
+  postTaskCategory
+
 } from "../modules/taskData";
 import { 
   getCategories,
@@ -97,18 +100,12 @@ export default function TaskEditor() {
 
   const [selectedCategoryId, setSelectedCategoryId] = useState("");
   const [selectedCategoryName, setSelectedCategoryName] = useState("");
+  const [onCategoryPage, setOnCategoryPage] = useState(false);
+
   const handleSelectionChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSelectedCategoryId((event.target as HTMLInputElement).value);
   };
 
-  // -------------------------------------
-  // Get task category name
-  // -------------------------------------
-  async function getTaskCategory(taskCategoryId: any) {
-    const token = await getToken({ template: JWT_TEMPLATE_NAME});
-    const category = await getCategoryId(token, taskCategoryId);
-    return category[0];
-  }
 
   // -------------------------------------
   // Add a to-do task to the react DOM
@@ -121,9 +118,15 @@ export default function TaskEditor() {
         return;
     }
     const token = await getToken({ template: JWT_TEMPLATE_NAME });
-    const newTask = await postTask(token, addTaskText);
-    setAddTaskText("");
-    setTasks([newTask].concat(tasks));
+    if (onCategoryPage === true) {
+      const newTask = await postTaskCategory(token, addTaskText, query.id);
+      setAddTaskText("");
+      setTasks([newTask].concat(tasks));
+    } else {
+      const newTask = await postTask(token, addTaskText);
+      setAddTaskText("");
+      setTasks([newTask].concat(tasks));
+    }
   }
 
   // -------------------------------------
@@ -196,37 +199,49 @@ export default function TaskEditor() {
   // -------------------------------------
   useEffect(() => {
     async function process() {
-      // Todo page
+      // Unifinished page
       if ((userId) && (pathname == "/todos")) {
         const token = await getToken({ template: JWT_TEMPLATE_NAME});
-        setTasks(await getTasks(token));
+        setTasks(await getDoneTasks(token, false));
         setLoading(false);
       }
-      // Edit task page
-      if ((userId) && (pathname == "/todos/[id]")) {
-        const token = await getToken({ template: JWT_TEMPLATE_NAME});
-        setTasks(await getIdTask(token, query.id));
-        setLoading(false);
-      }
-      // Todos category ID page
+      // Unifinished page with category
       if ((userId) && (pathname == "/todos/category/[id]")) {
-        console.log(query.id);
         const token = await getToken({ template: JWT_TEMPLATE_NAME});
-        setTasks(await getTasksForCategoryId(token, query.id));
+        setTasks(await getDoneCategoryTasks(token, false, query.id));
         setLoading(false);
+        setOnCategoryPage(true);
       }
+
+
       // Done page
       if ((userId) && (pathname == "/done")) {
         const token = await getToken({ template: JWT_TEMPLATE_NAME});
         setTasks(await getDoneTasks(token, true));
         setLoading(false);
       }
-      // Unfinished page
-      if ((userId) && (pathname == "/unfinished")) {
+      // Done page with category 
+      if ((userId) && (pathname == "/done/category/[id]")) {
         const token = await getToken({ template: JWT_TEMPLATE_NAME});
-        setTasks(await getDoneTasks(token, false));
+        setTasks(await getDoneCategoryTasks(token, true, query.id));
+        setLoading(false);
+        setOnCategoryPage(true);
+      }
+
+      // Edit task page
+      if ((userId) && (pathname == "/todos/[id]")) {
+        const token = await getToken({ template: JWT_TEMPLATE_NAME});
+        setTasks(await getIdTask(token, query.id));
         setLoading(false);
       }
+
+      // All page with category
+      if ((userId) && (pathname == "/all")) {
+        const token = await getToken({ template: JWT_TEMPLATE_NAME});
+        setTasks(await getTasks(token));
+        setLoading(false);
+      }
+
       // Starred page
       if ((userId) && (pathname == "/starred")) {
         const token = await getToken({ template: JWT_TEMPLATE_NAME});
@@ -308,7 +323,7 @@ export default function TaskEditor() {
                             </Typography>
                             {/* Category text */}
                             <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-                                Category: {task.categoryName}
+                                Category: { (task.categoryName) ? task.categoryName : "None"}
                             </Typography>
 
                           </Box>
