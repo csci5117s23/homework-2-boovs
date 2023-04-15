@@ -372,7 +372,7 @@ export default function TaskEditor() {
                   {/* -------------------------------------------------------------------------------- */}
                   {/* Task editor */}
                   { pathname == "/todos/[id]" && 
-                    <Card variant="outlined" sx={{ minWidth: '100%', minHeight: '50vh', mt: 2 }}>
+                    <Card variant="outlined" sx={{ minWidth: '100%', mt: 2, minHeight: '100%'}}>
                       <CardContent sx={{ display: 'flex', justifyContent: 'space-between'}}>
                         <Typography variant="h6"> Enter a new task description </Typography>
                       </CardContent>
@@ -397,7 +397,7 @@ export default function TaskEditor() {
                             '& > :not(style)': {
                               m: 1,
                               width: '100%',
-                              height: 128,
+                              height: '100%',
                             },
                           }}
                         >
