@@ -4,6 +4,8 @@ import React, { useState, useEffect } from 'react';
 import type { AppProps } from 'next/app'
 import Link from 'next/link';
 import Card from '@mui/material/Card';
+import Container from '@mui/material/Card';
+
 
 // Component Imports
 import SignInPage from '../components/SignInPage'
@@ -19,6 +21,7 @@ import {
   useUser,
   useAuth,
 } from '@clerk/nextjs';
+import { Button } from '@mui/material';
 
 
 // CLERK Publishable Key
@@ -37,9 +40,13 @@ function MyApp({ Component, pageProps }: AppProps) {
 
       {/* User logged in */}
       <SignedIn>  
-        <Card sx={{ backgroundColor: 'grey', textAlign: 'center'}}>
-          <Link href="/todos">Go back home.</Link>
-        </Card>
+        <Container sx={{ display: 'flex', justifyContent: 'center', height: '6vh', margin: 1, backgroundColor: "#283593"}}>
+          <Link href="/todos"> 
+            <Button variant="outlined" sx={{ display: 'flex', justifyContent: 'center', height: '80%', margin: 1, backgroundColor: "black"}}>
+              Go back to main To-do list. 
+            </Button>
+          </Link>
+        </Container>
         <Component {...pageProps} />
       </SignedIn>
 

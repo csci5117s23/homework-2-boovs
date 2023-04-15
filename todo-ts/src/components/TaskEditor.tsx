@@ -266,7 +266,7 @@ export default function TaskEditor() {
       <>
 
         {/* Add task feature only shows on 'todo' page */}
-        {(pathname === "/todos") && 
+        {(pathname === "/todos" || pathname === "/todos/category/[id]") && 
           <Box sx={{ mt: 2 }}>
             <TextField 
                 sx={{ minWidth: '100%', mt: 1}}
@@ -308,7 +308,7 @@ export default function TaskEditor() {
                             </Typography>
                             {/* Category text */}
                             <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-                                Category: {task.categoryId}
+                                Category: {task.categoryName}
                             </Typography>
 
                           </Box>

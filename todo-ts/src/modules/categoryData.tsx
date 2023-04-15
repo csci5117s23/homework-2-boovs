@@ -29,6 +29,24 @@ export async function getCategoryId(authToken: any, categoryId: any) {
     return categories.filter((category: any) => (category._id === categoryId))
 }
 
+// Gets a category data from the given ID
+export async function getCategoryIdData(authToken: any, categoryId: any) {
+    return await fetch(backend_base+route+"/"+categoryId,{
+        'method':'GET',
+        'headers': {
+            'Authorization': 'Bearer ' + authToken,
+        }
+        })
+        .then((response) => { 
+            return response.json().then((data) => {
+                console.log(data);
+                return data;
+            }).catch((err) => {
+                console.log(err);
+            }) 
+        });
+}
+
 // ------------------------------------------------
 // POST Functions
 // ------------------------------------------------

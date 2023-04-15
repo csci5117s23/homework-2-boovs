@@ -4,7 +4,9 @@ import { dateSort } from '@/modules/dateFormatter';
 const backend_base = process.env.NEXT_PUBLIC_BACKEND_BASE_URL;
 const API_KEY_R = "2b2e8993-944c-491d-9081-ec3f2412fe50";
 const route: string = "/task";
-  
+
+import { getCategoryId, getCategoryIdData } from '@/modules/categoryData';
+
 // ------------------------------------------------
 // GET Functions 
 // ------------------------------------------------
@@ -92,39 +94,16 @@ export async function postTask(authToken: any, taskText: string) {
 // ------------------------------------------------
 export async function updateTask(authToken: any, task: any) {
     // Get category name
-    const categoryQuery = await fetch(backend_base+"/category/"+task.categoryId, {
-        'method':'GET',
-        'headers': {
-            'Authorization': 'Bearer ' + authToken,
-        }
-    })
-    const category = await categoryQuery.json();
-    const categoryName = category.name;
-
-    // const result = await fetch(backend_base+route+"/"+task._id, {
-    //     'method':'PUT',
-    //     'headers': {'Authorization': 'Bearer ' + authToken,
-    //     'Content-Type': 'application/json'},
-    //     'body': JSON.stringify(task)
-    // });
-    // return await result.json(); 
-
+    const categoryQuery = await getCategoryIdData(authToken, task.categoryId);
+    task.categoryName = categoryQuery.value;
+    
     const result = await fetch(backend_base+route+"/"+task._id, {
         'method':'PUT',
         'headers': {'Authorization': 'Bearer ' + authToken,
         'Content-Type': 'application/json'},
-        'body': JSON.stringify({
-            id:             task.id,
-            categoryId:     task.categoryId,
-            categoryName:   categoryName,
-            value:          task.value,
-            done:           task.done,
-            starred:        task.starred,
-            createdOn: task.createdOn,
-            
-        })
+        'body': JSON.stringify(task)
     });
-    return await result.json(); 
+    return await result.json();
 
 }
 
