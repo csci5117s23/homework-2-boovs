@@ -16,7 +16,7 @@ Please fill out all of the following sections to help us grade your submission:
 
 ## Challenge Task
 
-* I started the challenge task: [yes/no] [YES]
-* I completed the challenge task: [yes/no] [YES]
+* I started the challenge task: [YES]
+* I completed the challenge task: [YES]
 
 
