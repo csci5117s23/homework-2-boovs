@@ -18,6 +18,6 @@
       "@/*": ["./src/*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "todobackend/index.ts", "todobackend/index.ts"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "todobackend/index.js", "todobackend/index.js"],
   "exclude": ["node_modules"]
 }

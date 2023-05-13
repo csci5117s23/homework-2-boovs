@@ -2,7 +2,6 @@
 import { dateSort } from '@/modules/dateFormatter';
 
 const backend_base = process.env.NEXT_PUBLIC_BACKEND_BASE_URL;
-const API_KEY_R = "2b2e8993-944c-491d-9081-ec3f2412fe50";
 const route: string = "/task";
 
 import { getCategoryId, getCategoryIdData } from '@/modules/categoryData';

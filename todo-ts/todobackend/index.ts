@@ -32,7 +32,6 @@ const categorySchemaYup = object( {
   value:      string().required(),
   createdOn:  date().default(() => new Date()),
 })
-crudlify(app, {task: taskSchemaYup, category: categorySchemaYup}, options)
 //////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////
 
@@ -143,5 +142,8 @@ app.use('/category/:id', async (req: any, res: any, next: any) => {
 })
 //////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////
+
+crudlify(app, {task: taskSchemaYup, category: categorySchemaYup}, options)
+
 
 export default app.init();
